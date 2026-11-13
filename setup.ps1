@@ -104,7 +104,6 @@ $allAvailableRules = (Get-ChildItem -Path (Join-Path $sourceAgents "rules") -Fil
 $selectedSkills = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 $selectedRules = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
 $installBaseTemplate = $false
-$installLearnings = $false
 
 $modeDescription = ""
 
@@ -139,24 +138,21 @@ elseif ($Preset -eq "base") {
     $installBaseTemplate = $true
 }
 elseif ($Preset -eq "web") {
-    $modeDescription = "Preset: 'web' (Trọn bộ cho phát triển Web Frontend / Fullstack)"
+    $modeDescription = "Preset: 'web' (Trọn bộ 9 skills và 2 rules phát triển Web Frontend / Fullstack)"
     foreach ($s in $allAvailableSkills) { [void]$selectedSkills.Add($s) }
     foreach ($r in $allAvailableRules) { [void]$selectedRules.Add($r) }
-    $installLearnings = $true
 }
 elseif ($Preset -eq "all") {
     $modeDescription = "Preset: 'all' (Toàn bộ kho cấu hình bao gồm AGENTS.md và toàn bộ skills/rules)"
     $installBaseTemplate = $true
     foreach ($s in $allAvailableSkills) { [void]$selectedSkills.Add($s) }
     foreach ($r in $allAvailableRules) { [void]$selectedRules.Add($r) }
-    $installLearnings = $true
 }
 else {
     # Mặc định nếu không truyền tham số: Preset web
     $modeDescription = "Preset: 'web' (Mặc định khi không chỉ định preset)"
     foreach ($s in $allAvailableSkills) { [void]$selectedSkills.Add($s) }
     foreach ($r in $allAvailableRules) { [void]$selectedRules.Add($r) }
-    $installLearnings = $true
 }
 
 Write-ColorHost "Chế độ cài đặt        : $modeDescription" Gray
@@ -247,14 +243,11 @@ foreach ($ruleName in $selectedRules) {
     }
 }
 
-# Learnings nếu có trong preset
-if ($installLearnings) {
-    $learningsDir = Join-Path $sourceAgents "learnings"
-    if (Test-Path $learningsDir) {
-        $lFiles = Get-ChildItem -Path $learningsDir -Recurse -File
-        foreach ($lf in $lFiles) {
-            $filesToProcess.Add($lf)
-        }
+# Đảm bảo thư mục lưu bài học .agents/learnings tồn tại trong dự án đích cho dự án tự tích lũy tri thức
+if ($selectedSkills.Count -gt 0 -or $selectedRules.Count -gt 0) {
+    $targetLearningsDir = Join-Path $targetAgents "learnings"
+    if (-not (Test-Path $targetLearningsDir)) {
+        New-Item -ItemType Directory -Force -Path $targetLearningsDir | Out-Null
     }
 }
 

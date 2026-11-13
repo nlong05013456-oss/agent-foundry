@@ -21,7 +21,7 @@ Kho cấu hình chuẩn hóa dùng chung cho **Google Antigravity / AI Agent (Ag
 | **6. Rà soát mã nguồn & đánh giá chất lượng** | • *"review file này giúp mình"*<br>• *"đánh giá chất lượng đoạn code vừa viết"*<br>• *"rà soát nợ kỹ thuật và clean code cho PR này"* | Skill `code-reviewer`<br>(kèm playbook) | `.\setup.ps1 -ProjectPath "." -Skills "code-reviewer"` | `.agents/skills/code-reviewer/` | **Git**, Linter dự án |
 | **7. Lập kế hoạch & phân tích ý tưởng trước khi code** | • *"lên kế hoạch làm tính năng giỏ hàng"*<br>• *"brainstorm cách triển khai tính năng X"*<br>• *"phân tích yêu cầu và thiết kế giải pháp"* | Skill `plan`<br>+ Skill `brainstorming` | `.\setup.ps1 -ProjectPath "." -Skills "plan","brainstorming"` | `.agents/skills/plan/`<br>`.agents/skills/brainstorming/` | Không cần thêm |
 | **8. Tích lũy tri thức & lưu kinh nghiệm dự án** | • *"lưu lại kinh nghiệm từ task này"*<br>• *"ghi lại kiến trúc và lỗi vừa fix vào learnings"*<br>• *"viết tài liệu coffee talk cho developer"* | Skill `ai-learning`<br>+ Skill `human-learning`<br>+ Rule `load-learnings` | `.\setup.ps1 -ProjectPath "." -Skills "ai-learning","human-learning" -Rules "load-learnings"` | `.agents/skills/ai-learning/`<br>`.agents/skills/human-learning/`<br>`.agents/rules/load-learnings.md` | Không cần thêm |
-| **⚡ Cài đặt trọn bộ cho dự án Web** | • *"cài toàn bộ cấu hình web"*<br>• *"setup full bộ web development"* | Preset `web` (9 skills + 2 rules + learnings) | `.\setup.ps1 -ProjectPath "." -Preset web` | `.agents/` | Git, Node.js |
+| **⚡ Cài đặt trọn bộ cho dự án Web** | • *"cài toàn bộ cấu hình web"*<br>• *"setup full bộ web development"* | Preset `web` (9 skills + 2 rules) | `.\setup.ps1 -ProjectPath "." -Preset web` | `.agents/` | Git, Node.js |
 
 > 💡 **Quy tắc xử lý đặc biệt dành cho Agent**:
 > 1. **Kết hợp nhiều việc (Multi-intent)**: Khi người dùng nói câu chứa nhiều việc (ví dụ: *“làm lại giao diện rồi test nút đăng nhập”*), lấy tất cả các mục tương ứng (`frontend-design`, `web-design-backbone` và `webapp-testing`).
@@ -61,5 +61,5 @@ Kho cấu hình chuẩn hóa dùng chung cho **Google Antigravity / AI Agent (Ag
 | Tên Preset | Thành phần bao gồm | Mục đích sử dụng | Lệnh cài đặt mẫu |
 |---|---|---|---|
 | **`base`** | Chỉ cài file mẫu `AGENTS.md` (chứa 4 luật nền) tại gốc dự án đích. | Dành cho dự án mới bắt đầu; giữ dự án gọn nhẹ và có sẵn chỉ dẫn để AI tự lấy thêm kỹ năng khi cần. | `.\setup.ps1 -ProjectPath "." -Preset base` |
-| **`web`** | Trọn bộ 9 skills, 2 rules và learnings mẫu. | Dành cho các dự án Web Frontend / Fullstack muốn có sẵn toàn bộ công cụ. | `.\setup.ps1 -ProjectPath "." -Preset web` |
-| **`all`** | Toàn bộ kho cấu hình (bao gồm `AGENTS.md`, 9 skills, 2 rules, learnings). | Cài đặt toàn diện không thiếu bất kỳ mục nào. | `.\setup.ps1 -ProjectPath "." -Preset all` |
+| **`web`** | Trọn bộ 9 skills và 2 rules (tạo sẵn thư mục `.agents/learnings/` sạch để dự án tự tích lũy bài học, không chép file mẫu). | Dành cho các dự án Web Frontend / Fullstack muốn có sẵn toàn bộ công cụ. | `.\setup.ps1 -ProjectPath "." -Preset web` |
+| **`all`** | Toàn bộ kho cấu hình (bao gồm `AGENTS.md`, 9 skills, 2 rules, thư mục `.agents/learnings/`). | Cài đặt toàn diện không thiếu bất kỳ mục nào. | `.\setup.ps1 -ProjectPath "." -Preset all` |
