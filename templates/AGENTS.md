@@ -33,14 +33,25 @@ Mọi AI Agent khi làm việc trong dự án này PHẢI tuân thủ nghiêm ng
 
 ---
 
-## 4. Hướng Dẫn Dành Cho Anti Khi Cần Thêm Cấu Hình
+## 4. Hướng Dẫn Dành Cho Anti: Nhận Diện Ý Định & Cài Đặt Cấu Hình Tự Động
 
-Khi người dùng yêu cầu thực hiện công việc chuyên biệt hoặc muốn lấy thêm kỹ năng:
-1. **Tra cứu danh mục**: Đọc bảng *“Việc cần làm → mục cần cài”* trong file `CATALOG.md` từ kho cấu hình:
-   - Bản clone cục bộ: `D:\Tools\antigravity-starter\CATALOG.md` (hoặc đường dẫn kho của bạn)
-   - Hoặc GitHub Private Repo: `https://github.com/nlong05013456-oss/antigravity-starter` (truy cập qua quyền GitHub hiện có).
-2. **Chạy lệnh setup chọn lọc**: Kích hoạt `setup.ps1` với đúng `-Skills` và/hoặc `-Rules` cần dùng trỏ vào dự án này:
-   ```powershell
-   <Đường_dẫn_kho>\setup.ps1 -ProjectPath "." -Skills "<Tên_Skill>" -Rules "<Tên_Rule>"
-   ```
-3. **Phạm vi lưu trữ**: Các file được cài đặt sẽ nằm gọn gàng trong `.agents/` tại gốc dự án đích. Giữ nguyên 100% mã nguồn dự án và nội dung riêng của file `AGENTS.md` này.
+Khi người dùng đưa ra bất kỳ yêu cầu nào bằng ngôn ngữ tự nhiên:
+
+1. **Suy ra mục đích từ toàn bộ yêu cầu**:
+   - Đối chiếu yêu cầu của người dùng với cột *“Câu nói mẫu”* và *“Việc cần làm”* trong file `CATALOG.md` (từ clone cục bộ `D:\Tools\antigravity-starter\CATALOG.md` hoặc GitHub repo `https://github.com/nlong05013456-oss/antigravity-starter`).
+2. **Phân loại hành động**:
+   - **Nếu yêu cầu khớp rõ với một mục trong catalog**:
+     - Kiểm tra trong thư mục `.agents/` của dự án đích.
+     - Nếu đã có sẵn: dùng ngay skill/rule đó để thực hiện yêu cầu.
+     - Nếu còn thiếu: tự động chạy script `setup.ps1` để cài chọn lọc đúng mục còn thiếu vào dự án hiện tại:
+       ```powershell
+       <Đường_dẫn_kho>\setup.ps1 -ProjectPath "." -Skills "<Tên_Skill>" -Rules "<Tên_Rule>"
+       ```
+       sau đó tiến hành thực hiện yêu cầu.
+   - **Nếu yêu cầu kết hợp nhiều việc** (ví dụ: *“làm lại giao diện rồi test nút đăng nhập”*):
+     - Xác định và lấy đủ tất cả các mục tương ứng (ví dụ: `frontend-design`, `web-design-backbone` và `webapp-testing`).
+   - **Nếu là việc nhỏ, đơn giản** (ví dụ: *“sửa một chữ trên nút Đăng nhập”*, sửa typo, chỉnh nhanh 1 giá trị):
+     - Xử lý trực tiếp ngay lập tức nếu chỉ dẫn hiện tại đã đủ, **KHÔNG** cài đặt thêm skill hay rule không cần thiết.
+3. **Phạm vi tác động**:
+   - Mọi skill/rule cài thêm phải nằm trong `.agents/` của dự án đích.
+   - Giữ nguyên 100% mã nguồn dự án và các nội dung tùy biến trong file `AGENTS.md` này.

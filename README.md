@@ -3,14 +3,14 @@
 Kho cấu hình chuẩn hóa dùng chung cho **Google Antigravity / AI Agent**, hỗ trợ cài đặt **từng phần theo tiến độ dự án (Modular Configuration Setup)**. Dự án mới chỉ cần cấu hình nền, khi đến giai đoạn làm web, kiểm thử, review hoặc dọn dẹp thư mục mới cài đúng mục cần dùng.
 
 - **Repository**: [https://github.com/nlong05013456-oss/antigravity-starter](https://github.com/nlong05013456-oss/antigravity-starter) (Private)
-- **Danh mục chi tiết toàn bộ Skills & Rules**: Xem tại file [CATALOG.md](CATALOG.md) với bảng tra cứu **“Việc cần làm → mục cần cài”**.
+- **Danh mục chi tiết toàn bộ Skills & Rules**: Xem tại file [CATALOG.md](CATALOG.md) với bảng tra cứu **“Việc cần làm → mục cần cài”** kèm **“Câu nói mẫu”**.
 
 ---
 
 ## 📌 Triết lý thiết kế & Tính năng nổi bật
 
 - **Cài đặt từng phần (Modular & Incremental)**: Không nhồi nhét tất cả cấu hình ngay từ đầu. Dự án bắt đầu gọn nhẹ với file nền tảng `AGENTS.md` (chứa 4 luật nền), sau đó mở rộng dần theo từng chặng phát triển.
-- **Tự động hóa thông minh cho Anti**: File `AGENTS.md` ở gốc dự án hướng dẫn AI Agent (Anti) tự tra cứu `CATALOG.md` (từ clone cục bộ hoặc GitHub API với quyền hiện tại) để lấy thêm đúng skill/rule khi người dùng yêu cầu.
+- **Tự động nhận diện ý định tiếng Việt**: Người dùng chỉ cần nói tự nhiên bằng tiếng Việt (ví dụ: *“làm web đẹp kiểu ảnh này”*, *“dọn thư mục cho gọn”*), Anti sẽ tự tra cứu `CATALOG.md` để cài đúng kỹ năng còn thiếu.
 - **Bảo toàn trọn vẹn thư mục Skill**: Sao chép nguyên vẹn cả thư mục của skill, giữ lại tất cả file phụ trong `resources/`, `scripts/`, `references/`.
 - **An toàn tuyệt đối cho dự án**:
   - Mã nguồn hiện có được giữ nguyên 100%.
@@ -19,7 +19,22 @@ Kho cấu hình chuẩn hóa dùng chung cho **Google Antigravity / AI Agent**, 
 
 ---
 
-## 🛠️ Hướng dẫn cài đặt theo từng chặng dự án (Đã kiểm thử thành công)
+## 🤖 Nhận Diện Ý Định Tự Động Từ Tiếng Việt (Đã kiểm thử thực tế)
+
+Khi dự án đã được khởi tạo với `-Preset base`, bạn chỉ cần ra lệnh bằng tiếng Việt trong khung chat của Anti:
+
+| Câu nói tự nhiên của bạn | Anti tự động phân tích & xử lý | Cấu hình được cài vào `.agents/` |
+|---|---|---|
+| **“làm giao diện giống ảnh này”** *(hoặc “làm web đẹp kiểu ảnh này”)* | Khớp mục **Làm giao diện Web** trong `CATALOG.md` → tự chạy setup lấy skill thiết kế và rule web. | • `skills/frontend-design/`<br>• `rules/web-design-backbone.md` |
+| **“sắp xếp lại thư mục cho gọn”** *(hoặc “dọn thư mục cho gọn”)* | Khớp mục **Dọn dẹp thư mục** → tự lấy skill tổ chức lại cây thư mục chuẩn mực. | • `skills/organize-project/` |
+| **“mở web thử nút đăng nhập”** *(hoặc “viết test tự động luồng checkout”)* | Khớp mục **Kiểm thử Web** → tự lấy skill kiểm thử E2E Playwright và Vitest. | • `skills/webapp-testing/` |
+| **“rà phần code vừa sửa”** *(hoặc “quét bug trên diff này”)* | Khớp mục **Rà soát diff & bảo mật** → tự lấy skill kiểm tra bug và OWASP. | • `skills/find-bugs/` |
+| **“làm lại giao diện rồi test nút đăng nhập”** | **Đa mục đích (Multi-intent)** → tự động lấy đủ cả hai nhóm công cụ. | • `frontend-design` + `web-design-backbone`<br>• `webapp-testing` |
+| **“sửa chữ trên nút Đăng nhập”** *(ví dụ: sửa text, fix typo, đổi 1 tên biến)* | **Việc nhỏ (Trivial task)** → Anti trực tiếp sửa code ngay, **KHÔNG** cài thêm skill rác. | *Không cài thêm file nào* (xử lý trực tiếp file code) |
+
+---
+
+## 🛠️ Hướng dẫn cài đặt thủ công theo từng chặng (Nếu muốn chủ động chạy lệnh)
 
 Tải kho cấu hình về máy của bạn (chỉ cần thực hiện 1 lần):
 
@@ -46,8 +61,6 @@ Khi bước vào giai đoạn thiết kế giao diện, cài đặt skill thiế
 .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Skills "frontend-design" -Rules "web-design-backbone"
 ```
 
-*Tác động: Toàn bộ thư mục `frontend-design` và rule `web-design-backbone.md` được thêm vào `.agents/`, các file khác trong dự án không bị ảnh hưởng.*
-
 ---
 
 ### 3️⃣ Chặng 3: Khi viết kịch bản kiểm thử (`webapp-testing`)
@@ -56,8 +69,6 @@ Khi hoàn thành giao diện và cần viết tests E2E (Playwright) hoặc Unit
 ```powershell
 .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Skills "webapp-testing"
 ```
-
-*Tác động: Bổ sung riêng skill `webapp-testing` vào `.agents/skills/`. Script tự kiểm tra sự sẵn sàng của Node.js & npm/npx trên máy.*
 
 ---
 
@@ -68,8 +79,6 @@ Trước khi tạo Pull Request hoặc phát hành, cài đặt bộ đôi revie
 .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Skills "code-reviewer","find-bugs"
 ```
 
-*Tác động: Sao chép cả `code-reviewer` (kèm file phụ `resources/implementation-playbook.md`) và `find-bugs`.*
-
 ---
 
 ### 5️⃣ Chặng 5: Khi dọn dẹp & sắp xếp cấu trúc thư mục (`organize-project`)
@@ -79,12 +88,10 @@ Khi dự án phình to, xuất hiện nhiều file tự do hoặc cần tái c�
 .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Skills "organize-project"
 ```
 
-*Tác động: Bổ sung skill `organize-project` để AI hỗ trợ rà soát, dọn file rác, chuẩn hóa quy chuẩn đặt tên và kiểm tra tính toàn vẹn của import.*
-
 ---
 
 ### ⚡ Cài đặt trọn bộ khi cần (`-Preset web`)
-Nếu bạn muốn trang bị đầy đủ toàn bộ kỹ năng và quy tắc web ngay từ đầu:
+Nếu bạn muốn trang bị đầy đủ toàn bộ 9 skills và 2 rules web ngay từ đầu:
 
 ```powershell
 .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Preset web
@@ -99,17 +106,17 @@ Nếu bạn muốn trang bị đầy đủ toàn bộ kỹ năng và quy tắc w
 > 📖 **Xem chi tiết đầy đủ tại: [CATALOG.md](CATALOG.md)**
 
 ### Bảng Skills
-| Tên Skill | Dùng khi nào | Ví dụ cách gọi (Prompt / Lệnh) | Nguồn (Source) | Công cụ cần thêm nếu có |
+| Tên Skill | Dùng khi nào | Câu nói tự nhiên thường gặp | Nguồn (Source) | Công cụ cần thêm nếu có |
 |---|---|---|---|---|
-| **`organize-project`** | Thư mục dự án lộn xộn, cần tái cấu trúc, dọn file rác, chuẩn hóa naming | *"Tổ chức lại cấu trúc thư mục dự án"*, *"Dọn dẹp file thừa trong src"* | Tích hợp mới (`antigravity-starter`) | Không cần thêm |
-| **`plan`** | Bắt đầu task lớn; quy trình 3 pha: Brainstorming → Execution → Save Learnings | *"Lên kế hoạch và thực thi task giỏ hàng"*, *"/plan"* | Workflow chuẩn hóa (`antigravity-starter`) | Test runner dự án |
-| **`brainstorming`** | Trước khi code; làm rõ ý tưởng, hỏi từng câu một, khóa hiểu biết (Understanding Lock) | *"Brainstorm ý tưởng làm trang thanh toán"* | Community (`demo_landing_page`) | Không cần thêm |
-| **`frontend-design`** | Thiết kế UI/UX mới, chuẩn Design Tokens, responsive, animations mượt mà | *"Thiết kế dashboard mobile và desktop"* | Tích hợp mới (`antigravity-starter`) | **Node.js** |
-| **`webapp-testing`** | Viết test E2E Playwright, Vitest, Component testing; kiểm tra edge cases | *"Viết test Playwright cho luồng login"* | Tích hợp mới (`antigravity-starter`) | **Node.js**, **npm/npx**, `@playwright/test`, `vitest` |
-| **`find-bugs`** | Quét git diff trên nhánh local tìm bug logic và bảo mật (OWASP, SQLi, XSS, CSRF) | *"Quét bug và bảo mật trên diff nhánh này"* | Community (`demo_landing_page`) | **Git** (`git diff`) |
-| **`code-reviewer`** | Đánh giá chất lượng code, cấu trúc, hiệu năng, nợ kỹ thuật kèm playbook | *"Review file AuthService.ts giúp mình"* | Community (`demo_landing_page`) | **Git**, Linter |
-| **`ai-learning`** | Khi kết thúc task; tự động trích xuất kiến thức vào `.agents/learnings/` | *"Lưu learnings từ task này vào dự án"* | Workflow chuẩn hóa (`antigravity-starter`) | Không cần thêm |
-| **`human-learning`** | Giải thích sâu task phức tạp dạng "coffee talk" cho developer | *"Viết tài liệu coffee talk cho task vừa rồi"* | Workflow chuẩn hóa (`antigravity-starter`) | Không cần thêm |
+| **`organize-project`** | Cần tái cấu trúc thư mục, dọn file rác, chuẩn hóa naming | *"dọn thư mục cho gọn"*, *"sắp xếp lại thư mục"* | Tích hợp mới (`antigravity-starter`) | Không cần thêm |
+| **`plan`** | Bắt đầu task lớn; quy trình 3 pha: Brainstorm → Execute → Learnings | *"lên kế hoạch làm tính năng..."*, *"/plan"* | Workflow chuẩn hóa (`antigravity-starter`) | Test runner dự án |
+| **`brainstorming`** | Trước khi code; làm rõ ý tưởng, hỏi từng câu một, khóa hiểu biết | *"brainstorm cách làm..."*, *"phân tích yêu cầu"* | Community (`demo_landing_page`) | Không cần thêm |
+| **`frontend-design`** | Thiết kế UI/UX mới, chuẩn Design Tokens, responsive, animations | *"làm web đẹp kiểu ảnh này"*, *"làm giao diện giống ảnh này"* | Tích hợp mới (`antigravity-starter`) | **Node.js** |
+| **`webapp-testing`** | Viết test E2E Playwright, Vitest, Component testing; test edge cases | *"mở web thử nút đăng nhập"*, *"viết test Playwright"* | Tích hợp mới (`antigravity-starter`) | **Node.js**, **npm/npx**, `@playwright/test`, `vitest` |
+| **`find-bugs`** | Quét git diff trên nhánh local tìm bug logic và bảo mật (OWASP, SQLi) | *"rà phần code vừa sửa"*, *"quét bug trên diff này"* | Community (`demo_landing_page`) | **Git** (`git diff`) |
+| **`code-reviewer`** | Đánh giá chất lượng code, cấu trúc, hiệu năng, nợ kỹ thuật | *"review file này"*, *"đánh giá chất lượng code"* | Community (`demo_landing_page`) | **Git**, Linter |
+| **`ai-learning`** | Khi kết thúc task; tự động trích xuất kiến thức vào learnings | *"lưu lại kinh nghiệm từ task này"* | Workflow chuẩn hóa (`antigravity-starter`) | Không cần thêm |
+| **`human-learning`** | Giải thích sâu task phức tạp dạng "coffee talk" cho developer | *"viết tài liệu coffee talk cho task vừa rồi"* | Workflow chuẩn hóa (`antigravity-starter`) | Không cần thêm |
 
 ### Bảng Rules
 | Tên Rule | Dùng khi nào | Ví dụ cách gọi (Kích hoạt) | Nguồn (Source) | Công cụ cần thêm nếu có |
@@ -128,38 +135,6 @@ Nếu bạn muốn trang bị đầy đủ toàn bộ kỹ năng và quy tắc w
 | **npm / npx** | `webapp-testing` | `npm -v` | Đi kèm sẵn khi cài Node.js |
 | **Playwright** | `webapp-testing` (E2E testing) | `npx playwright --version` | Chạy trong dự án: `npm install -D @playwright/test && npx playwright install` |
 | **Vitest** | `webapp-testing` (Unit/Component test) | `npx vitest --version` | Chạy trong dự án: `npm install -D vitest` |
-
----
-
-## 📂 Cấu trúc kho lưu trữ (Repository Structure)
-
-```text
-antigravity-starter/
-├── CATALOG.md             # Danh mục tra cứu toàn bộ Skills, Rules và bảng “Việc cần làm → mục cần cài”
-├── README.md              # Hướng dẫn sử dụng & quy trình cài đặt từng phần
-├── setup.ps1              # Script cài đặt thông minh (-Preset base/web/all, -Skills, -Rules)
-├── templates/
-│   └── AGENTS.md          # Mẫu tài liệu thiết lập dự án (chứa 4 luật nền) và hướng dẫn cho Anti
-└── .agents/
-    ├── rules/
-    │   ├── load-learnings.md
-    │   └── web-design-backbone.md
-    ├── skills/
-    │   ├── ai-learning/
-    │   ├── brainstorming/
-    │   ├── code-reviewer/
-    │   │   ├── SKILL.md
-    │   │   └── resources/implementation-playbook.md
-    │   ├── find-bugs/
-    │   ├── frontend-design/
-    │   ├── human-learning/
-    │   ├── organize-project/
-    │   │   └── SKILL.md
-    │   ├── plan/
-    │   └── webapp-testing/
-    └── learnings/
-        └── landing-page.md
-```
 
 ---
 
