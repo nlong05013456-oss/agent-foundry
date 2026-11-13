@@ -3,6 +3,8 @@ name: human-learning
 description: "Tạo tài liệu giải thích chi tiết dạng 'coffee talk' để developer hiểu sâu kiến trúc, trade-offs và bài học từ task vừa thực hiện"
 ---
 
+<!-- Adapted from quang26071999/demo_landing_page -->
+
 # Human Learning Skill
 
 Sau khi hoàn thành task, AI viết một file markdown chi tiết giải thích toàn bộ quá trình bằng ngôn ngữ dễ hiểu — như một người bạn giỏi đang giải thích qua ly cà phê, không phải sách giáo khoa.

@@ -5,6 +5,8 @@ risk: unknown
 source: community
 ---
 
+<!-- Adapted from quang26071999/demo_landing_page -->
+
 # Tìm Bug
 
 Review các thay đổi trên nhánh này để tìm bug, lỗ hổng bảo mật và vấn đề chất lượng code.

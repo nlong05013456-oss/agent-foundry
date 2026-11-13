@@ -6,6 +6,8 @@ source: community
 date_added: "2026-02-27"
 ---
 
+<!-- Adapted from quang26071999/demo_landing_page -->
+
 # Chuyển đổi ý tưởng thành thiết kế
 
 ## Mục đích

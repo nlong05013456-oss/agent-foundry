@@ -3,6 +3,8 @@ name: plan
 description: "Quy trình thực thi task lập trình toàn diện: Brainstorming → Execution → Tự động lưu Learnings"
 ---
 
+<!-- Adapted from quang26071999/demo_landing_page -->
+
 # Plan & Execute Skill
 
 Quy trình 3 pha chuẩn mực để thực thi bất kỳ task lập trình nào: **Brainstorm → Execute → Save Learnings**.

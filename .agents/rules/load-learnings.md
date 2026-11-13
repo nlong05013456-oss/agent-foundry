@@ -4,6 +4,8 @@ globs: "**/*"
 trigger: always_on
 ---
 
+<!-- Adapted from quang26071999/demo_landing_page -->
+
 # Load Learnings Rule
 
 ## Khi nào áp dụng

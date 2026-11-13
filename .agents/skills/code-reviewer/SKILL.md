@@ -6,6 +6,8 @@ source: community
 date_added: "2026-02-27"
 ---
 
+<!-- Adapted from quang26071999/demo_landing_page -->
+
 ## Sử dụng skill này khi
 
 - Làm việc với các tác vụ hoặc quy trình review code

@@ -4,6 +4,8 @@ globs: "**/*.{html,css,js,jsx,tsx,ts,vue,svelte,astro}"
 trigger: always_on
 ---
 
+<!-- Adapted from quang26071999/demo_landing_page -->
+
 # Web Design Backbone Rule
 
 > **LUẬT KHÔNG THỂ THƯƠNG LƯỢNG.** Vi phạm bất kỳ mục nào → sản phẩm **FAILED**.

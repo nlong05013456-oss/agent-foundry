@@ -3,6 +3,8 @@ name: ai-learning
 description: "Trích xuất kiến thức, quyết định kiến trúc, bugs và patterns từ conversation hiện tại và lưu vào .agents/learnings/"
 ---
 
+<!-- Adapted from quang26071999/demo_landing_page -->
+
 # AI Learning Skill
 
 Trích xuất kiến thức từ conversation hiện tại và lưu vào **1 file duy nhất theo tên feature/chức năng**, tổng hợp cả 4 khía cạnh: Architecture, Bugs, How-to, Patterns.
