@@ -1,6 +1,6 @@
 ﻿<#
 .SYNOPSIS
-    Script cài đặt bộ cấu hình Antigravity Starter vào dự án đích.
+    Script cài đặt bộ cấu hình Agent Foundry vào dự án đích.
 
 .DESCRIPTION
     Đưa các rules, skills (kèm toàn bộ file phụ trong thư mục), và templates chuẩn
@@ -75,7 +75,7 @@ function Write-ColorHost {
 }
 
 Write-ColorHost "`n=======================================================" Cyan
-Write-ColorHost "   ANTIGRAVITY STARTER - BỘ CÀI ĐẶT CẤU HÌNH DỰ ÁN     " Cyan
+Write-ColorHost "       AGENT FOUNDRY - BỘ CÀI ĐẶT CẤU HÌNH DỰ ÁN       " Cyan
 Write-ColorHost "=======================================================`n" Cyan
 
 # 1. Định vị thư mục nguồn và đích

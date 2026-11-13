@@ -1,8 +1,9 @@
-# Antigravity Starter Kit 🚀
+# Agent Foundry 🚀
 
-Kho cấu hình chuẩn hóa dùng chung cho **Google Antigravity / AI Agent**, hỗ trợ cài đặt **từng phần theo tiến độ dự án (Modular Configuration Setup)**. Dự án mới chỉ cần cấu hình nền, khi đến giai đoạn làm web, kiểm thử, review hoặc dọn dẹp thư mục mới cài đúng mục cần dùng.
+Kho cấu hình chuẩn hóa dùng chung cho **Google Antigravity / AI Agent (Agent Foundry)**, hỗ trợ cài đặt **từng phần theo tiến độ dự án (Modular Configuration Setup)**. Dự án mới chỉ cần cấu hình nền, khi đến giai đoạn làm web, kiểm thử, review hoặc dọn dẹp thư mục mới cài đúng mục cần dùng.
 
-- **Repository**: [https://github.com/nlong05013456-oss/antigravity-starter](https://github.com/nlong05013456-oss/antigravity-starter) (Private)
+- **Repository**: [https://github.com/nlong05013456-oss/agent-foundry](https://github.com/nlong05013456-oss/agent-foundry) (Public - Mã nguồn mở)
+- **Thư mục cài đặt chuẩn**: `D:\Tools\agent-foundry`
 - **Danh mục chi tiết toàn bộ Skills & Rules**: Xem tại file [CATALOG.md](CATALOG.md) với bảng tra cứu **“Việc cần làm → mục cần cài”** kèm **“Câu nói mẫu”**.
 
 ---
@@ -39,8 +40,8 @@ Khi dự án đã được khởi tạo với `-Preset base`, bạn chỉ cần 
 Tải kho cấu hình về máy của bạn (chỉ cần thực hiện 1 lần):
 
 ```powershell
-git clone https://github.com/nlong05013456-oss/antigravity-starter.git D:\Tools\antigravity-starter
-cd D:\Tools\antigravity-starter
+git clone https://github.com/nlong05013456-oss/agent-foundry.git D:\Tools\agent-foundry
+cd D:\Tools\agent-foundry
 ```
 
 ### 1️⃣ Chặng 1: Khởi tạo cấu hình nền tảng (`base`)
@@ -108,20 +109,20 @@ Nếu bạn muốn trang bị đầy đủ toàn bộ 9 skills và 2 rules web n
 ### Bảng Skills
 | Tên Skill | Dùng khi nào | Câu nói tự nhiên thường gặp | Nguồn (Source) | Công cụ cần thêm nếu có |
 |---|---|---|---|---|
-| **`organize-project`** | Cần tái cấu trúc thư mục, dọn file rác, chuẩn hóa naming | *"dọn thư mục cho gọn"*, *"sắp xếp lại thư mục"* | Tích hợp mới (`antigravity-starter`) | Không cần thêm |
-| **`plan`** | Bắt đầu task lớn; quy trình 3 pha: Brainstorm → Execute → Learnings | *"lên kế hoạch làm tính năng..."*, *"/plan"* | Workflow chuẩn hóa (`antigravity-starter`) | Test runner dự án |
+| **`organize-project`** | Cần tái cấu trúc thư mục, dọn file rác, chuẩn hóa naming | *"dọn thư mục cho gọn"*, *"sắp xếp lại thư mục"* | Tích hợp mới (`agent-foundry`) | Không cần thêm |
+| **`plan`** | Bắt đầu task lớn; quy trình 3 pha: Brainstorm → Execute → Learnings | *"lên kế hoạch làm tính năng..."*, *"/plan"* | Workflow chuẩn hóa (`agent-foundry`) | Test runner dự án |
 | **`brainstorming`** | Trước khi code; làm rõ ý tưởng, hỏi từng câu một, khóa hiểu biết | *"brainstorm cách làm..."*, *"phân tích yêu cầu"* | Community (`demo_landing_page`) | Không cần thêm |
-| **`frontend-design`** | Thiết kế UI/UX mới, chuẩn Design Tokens, responsive, animations | *"làm web đẹp kiểu ảnh này"*, *"làm giao diện giống ảnh này"* | Tích hợp mới (`antigravity-starter`) | **Node.js** |
-| **`webapp-testing`** | Viết test E2E Playwright, Vitest, Component testing; test edge cases | *"mở web thử nút đăng nhập"*, *"viết test Playwright"* | Tích hợp mới (`antigravity-starter`) | **Node.js**, **npm/npx**, `@playwright/test`, `vitest` |
+| **`frontend-design`** | Thiết kế UI/UX mới, chuẩn Design Tokens, responsive, animations | *"làm web đẹp kiểu ảnh này"*, *"làm giao diện giống ảnh này"* | Tích hợp mới (`agent-foundry`) | **Node.js** |
+| **`webapp-testing`** | Viết test E2E Playwright, Vitest, Component testing; test edge cases | *"mở web thử nút đăng nhập"*, *"viết test Playwright"* | Tích hợp mới (`agent-foundry`) | **Node.js**, **npm/npx**, `@playwright/test`, `vitest` |
 | **`find-bugs`** | Quét git diff trên nhánh local tìm bug logic và bảo mật (OWASP, SQLi) | *"rà phần code vừa sửa"*, *"quét bug trên diff này"* | Community (`demo_landing_page`) | **Git** (`git diff`) |
 | **`code-reviewer`** | Đánh giá chất lượng code, cấu trúc, hiệu năng, nợ kỹ thuật | *"review file này"*, *"đánh giá chất lượng code"* | Community (`demo_landing_page`) | **Git**, Linter |
-| **`ai-learning`** | Khi kết thúc task; tự động trích xuất kiến thức vào learnings | *"lưu lại kinh nghiệm từ task này"* | Workflow chuẩn hóa (`antigravity-starter`) | Không cần thêm |
-| **`human-learning`** | Giải thích sâu task phức tạp dạng "coffee talk" cho developer | *"viết tài liệu coffee talk cho task vừa rồi"* | Workflow chuẩn hóa (`antigravity-starter`) | Không cần thêm |
+| **`ai-learning`** | Khi kết thúc task; tự động trích xuất kiến thức vào learnings | *"lưu lại kinh nghiệm từ task này"* | Workflow chuẩn hóa (`agent-foundry`) | Không cần thêm |
+| **`human-learning`** | Giải thích sâu task phức tạp dạng "coffee talk" cho developer | *"viết tài liệu coffee talk cho task vừa rồi"* | Workflow chuẩn hóa (`agent-foundry`) | Không cần thêm |
 
 ### Bảng Rules
 | Tên Rule | Dùng khi nào | Ví dụ cách gọi (Kích hoạt) | Nguồn (Source) | Công cụ cần thêm nếu có |
 |---|---|---|---|---|
-| **`load-learnings.md`** | Tự động kích hoạt đầu mỗi phiên chat; chỉ nạp các learnings liên quan | Tự động kích hoạt (`trigger: always_on`) | Chuẩn hóa (`antigravity-starter`) | Không cần thêm |
+| **`load-learnings.md`** | Tự động kích hoạt đầu mỗi phiên chat; chỉ nạp các learnings liên quan | Tự động kích hoạt (`trigger: always_on`) | Chuẩn hóa (`agent-foundry`) | Không cần thêm |
 | **`web-design-backbone.md`** | Bắt buộc tuân thủ khi viết/sửa file web (HTML, CSS, JSX, TSX, Vue...) | Tự động kích hoạt khi sửa web files (`globs: **/*`) | Community (`demo_landing_page`) | Không cần thêm |
 
 ---
@@ -139,5 +140,5 @@ Nếu bạn muốn trang bị đầy đủ toàn bộ 9 skills và 2 rules web n
 ---
 
 ## 🔒 Bản quyền & Quản lý
-- **Repository**: [https://github.com/nlong05013456-oss/antigravity-starter](https://github.com/nlong05013456-oss/antigravity-starter)
+- **Repository**: [https://github.com/nlong05013456-oss/agent-foundry](https://github.com/nlong05013456-oss/agent-foundry) (Public)
 - Được phát triển và tối ưu cho môi trường **Google Antigravity**.

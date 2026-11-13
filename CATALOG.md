@@ -1,6 +1,9 @@
-# Danh Mục Cấu Hình Antigravity (CATALOG.md) 📚
+# Danh Mục Cấu Hình Agent Foundry (CATALOG.md) 📚
 
-Kho cấu hình chuẩn hóa dùng chung cho **Google Antigravity / AI Agent**. 
+Kho cấu hình chuẩn hóa dùng chung cho **Google Antigravity / AI Agent (Agent Foundry)**. 
+
+- **Repository**: [https://github.com/nlong05013456-oss/agent-foundry](https://github.com/nlong05013456-oss/agent-foundry) (Public)
+- **Thư mục cài đặt chuẩn**: `D:\Tools\agent-foundry`
 
 > 🎯 **Cài đặt theo nhu cầu thực tế**: Dự án mới bắt đầu chỉ cần cấu hình nền (`-Preset base`). Trong quá trình phát triển, khi người dùng mô tả công việc bằng tiếng Việt, Anti sẽ tự động đối chiếu với bảng dưới đây để xác định và cài thêm đúng mục cần dùng.
 
