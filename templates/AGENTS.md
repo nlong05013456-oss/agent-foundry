@@ -1,52 +1,46 @@
-# Hướng Dẫn Dự Án & Cấu Hình Agent (AGENTS.md)
+# Quy Ước Dự Án & Chỉ Dẫn Agent (AGENTS.md)
 
-Tài liệu thiết lập ngữ cảnh cốt lõi và hướng dẫn tương tác dành cho AI Agent (Anti / Antigravity) trong dự án này.
-
----
-
-## 1. Thông Tin & Mục Tiêu Dự Án
-- **Tên dự án**: [Điền tên dự án của bạn]
-- **Mục tiêu chính**: [Mô tả ngắn gọn chức năng, giải pháp và giá trị cốt lõi mà sản phẩm mang lại]
-- **Công nghệ sử dụng (Stack)**: [Ví dụ: React, TypeScript, Tailwind CSS, Vite, Node.js...]
+Tài liệu thiết lập ngữ cảnh và các quy tắc làm việc bắt buộc dành cho AI Agent (Anti / Antigravity) trong dự án này.
 
 ---
 
-## 2. Quy Ước Mã Nguồn (Coding Conventions)
-- **Cấu trúc thư mục**: [Ví dụ: src/components, src/hooks, src/services...]
-- **Phong cách lập trình**: [Ví dụ: Functional components, TypeScript strict mode, CSS variables, kebab-case file naming...]
-- **Quy tắc an toàn**: Không commit secrets/keys, luôn kiểm tra null/undefined, handle network errors.
+## 1. Bốn Luật Nền Cốt Lõi (Bắt Buộc Tuân Thủ)
+
+Mọi AI Agent khi làm việc trong dự án này PHẢI tuân thủ nghiêm ngặt 4 nguyên tắc sau:
+
+1. **Đọc cấu trúc & theo quy ước hiện có**: Trước khi chỉnh sửa hoặc tạo mới, phải khảo sát kỹ cây thư mục, phong cách code, thư viện đang dùng và tuân thủ nhất quán các quy chuẩn sẵn có của dự án.
+2. **Giữ thay đổi đúng phạm vi**: Chỉ can thiệp vào các tệp và chức năng liên quan trực tiếp đến yêu cầu; tuyệt đối không tự ý refactor lan man hoặc sửa đổi các phần code ngoài phạm vi được giao.
+3. **Chạy kiểm tra phù hợp trước khi báo xong**: Luôn chủ động chạy các lệnh kiểm tra tương ứng (build, lint, typecheck, unit test...) để xác nhận không phát sinh lỗi hoặc cảnh báo trước khi thông báo hoàn tất task.
+4. **Tra catalog để cài thêm đúng mục khi cần**: Khi bắt đầu một giai đoạn công việc mới (làm giao diện web, viết kịch bản test, debug bảo mật, review code, dọn dẹp thư mục...), AI phải tra cứu file `CATALOG.md` trong kho cấu hình chuẩn để cài đặt đúng skill và rule cần thiết vào thư mục `.agents/` của dự án.
+
+---
+
+## 2. Thông Tin Dự Án (Điền khi khởi tạo)
+
+- **Tên dự án**: [Điền tên dự án]
+- **Mục tiêu chính**: [Mô tả ngắn gọn chức năng cốt lõi và bài toán dự án giải quyết]
+- **Công nghệ sử dụng**: [Ví dụ: React, Vite, TypeScript, Tailwind CSS, Node.js...]
 
 ---
 
 ## 3. Lệnh Kiểm Tra Dự Án (Verification Commands)
-- **Chạy môi trường dev**: `npm run dev`
-- **Kiểm tra linter/format**: `npm run lint`
-- **Kiểm tra kiểu dữ liệu**: `npm run typecheck`
-- **Chạy kiểm thử (Unit / E2E)**: `npm test` hoặc `npx playwright test`
-- **Build production**: `npm run build`
+
+- **Chạy môi trường Dev**: `npm run dev`
+- **Kiểm tra Linter/Format**: `npm run lint`
+- **Kiểm tra Kiểu dữ liệu**: `npm run typecheck`
+- **Chạy Tests**: `npm test` hoặc `npx playwright test`
+- **Build Production**: `npm run build`
 
 ---
 
-## 4. Kho Cấu Hình Chuẩn (Antigravity Starter Kit)
-Dự án này sử dụng kho cấu hình chuẩn hóa **Antigravity Starter** để bổ sung kỹ năng và quy tắc khi cần:
-- **Đường dẫn cục bộ**: `D:\Tools\antigravity-starter` (hoặc thư mục clone của bạn)
-- **GitHub Repo (Private)**: `https://github.com/nlong05013456-oss/antigravity-starter`
-- **Danh mục cấu hình chi tiết**: Xem file `CATALOG.md` tại kho cấu hình trên.
+## 4. Hướng Dẫn Dành Cho Anti Khi Cần Thêm Cấu Hình
 
----
-
-## 5. Hướng Dẫn Dành Riêng Cho AI Agent (Anti)
-
-> 🤖 **DÀNH CHO ANTI KHI NGƯỜI DÙNG YÊU CẦU LẤY THÊM CẤU HÌNH / SKILLS / RULES:**
-
-1. **Tra cứu danh mục**: Khi người dùng yêu cầu kích hoạt hoặc thêm kỹ năng (ví dụ: làm UI, viết test, review code, phân tích bugs...), Anti hãy đọc file `CATALOG.md` từ:
-   - Bản clone cục bộ đã có tại đường dẫn ghi ở mục 4, HOẶC:
-   - GitHub API từ repo Private `nlong05013456-oss/antigravity-starter` bằng quyền GitHub hiện có.
-2. **Xác định gói cần cài**: Chọn đúng tên `-Skills` và/hoặc `-Rules` tương ứng từ `CATALOG.md`.
-3. **Thực thi cài đặt tự động**: Chạy script `setup.ps1` từ kho cấu hình trỏ vào workspace của dự án này:
+Khi người dùng yêu cầu thực hiện công việc chuyên biệt hoặc muốn lấy thêm kỹ năng:
+1. **Tra cứu danh mục**: Đọc bảng *“Việc cần làm → mục cần cài”* trong file `CATALOG.md` từ kho cấu hình:
+   - Bản clone cục bộ: `D:\Tools\antigravity-starter\CATALOG.md` (hoặc đường dẫn kho của bạn)
+   - Hoặc GitHub Private Repo: `https://github.com/nlong05013456-oss/antigravity-starter` (truy cập qua quyền GitHub hiện có).
+2. **Chạy lệnh setup chọn lọc**: Kích hoạt `setup.ps1` với đúng `-Skills` và/hoặc `-Rules` cần dùng trỏ vào dự án này:
    ```powershell
    <Đường_dẫn_kho>\setup.ps1 -ProjectPath "." -Skills "<Tên_Skill>" -Rules "<Tên_Rule>"
    ```
-4. **Phạm vi tác động**:
-   - Tất cả các file kỹ năng và quy tắc được cài đặt sẽ nằm gọn gàng trong thư mục `.agents/` ở gốc dự án đích.
-   - Không được làm ảnh hưởng đến mã nguồn dự án hiện tại cũng như các nội dung tùy biến trong file `AGENTS.md` này.
+3. **Phạm vi lưu trữ**: Các file được cài đặt sẽ nằm gọn gàng trong `.agents/` tại gốc dự án đích. Giữ nguyên 100% mã nguồn dự án và nội dung riêng của file `AGENTS.md` này.

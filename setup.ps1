@@ -201,8 +201,22 @@ if ($installBaseTemplate) {
                 }
                 else {
                     Write-ColorHost "  [GIỮ NGUYÊN DỰ ÁN] AGENTS.md" Yellow
-                    Write-ColorHost "     -> File AGENTS.md đã tồn tại trong dự án đích với nội dung riêng. Đã giữ nguyên file hiện có!" Yellow
-                    Write-ColorHost "     -> Bạn có thể xem mẫu tại kho để bổ sung phần hướng dẫn Anti nếu cần." Yellow
+                    Write-ColorHost "     -> File AGENTS.md đã tồn tại trong dự án đích. Đã giữ nguyên file hiện có!" Yellow
+                    Write-ColorHost "     -> Phần hướng dẫn nên bổ sung vào AGENTS.md hiện có (nếu chưa có):" Cyan
+                    Write-ColorHost @"
+--------------------------------------------------------------------------------
+## Bốn Luật Nền Cốt Lõi:
+1. Đọc cấu trúc & theo quy ước hiện có
+2. Giữ thay đổi đúng phạm vi
+3. Chạy kiểm tra phù hợp trước khi báo xong
+4. Tra CATALOG.md để cài thêm đúng mục khi cần
+
+## Hướng Dẫn Dành Cho Anti Khi Cần Thêm Cấu Hình:
+- Tra cứu bảng 'Việc cần làm -> mục cần cài' trong file CATALOG.md
+- Chạy lệnh setup chọn lọc:
+  <Đường_dẫn_kho>\setup.ps1 -ProjectPath "." -Skills "<Tên_Skill>" -Rules "<Tên_Rule>"
+--------------------------------------------------------------------------------
+"@ DarkCyan
                     $stats.Conflict++
                     $conflictedFiles += "AGENTS.md"
                 }
