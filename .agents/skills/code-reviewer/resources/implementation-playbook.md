@@ -13,3 +13,4 @@ Tài liệu hướng dẫn thực tế các bước review mã nguồn hiện đ
 - Tránh render thừa (memoization, virtualization cho danh sách lớn).
 - Tối ưu truy vấn dữ liệu (tránh N+1 query, debouncing cho input tìm kiếm).
 - Dọn dẹp event listeners và subscriptions trong hook cleanup.
+
