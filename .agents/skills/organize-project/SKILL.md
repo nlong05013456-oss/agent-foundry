@@ -66,3 +66,4 @@ Hướng dẫn quy trình chuyên nghiệp để rà soát, dọn dẹp và tái
 - [ ] Tất cả imports đã được cập nhật chính xác và build thành công?
 - [ ] Không có file tạm (`.tmp`, `*.bak`, `Thumbs.db`) bị bỏ lại?
 - [ ] Quy tắc đặt tên tệp và thư mục đã đồng nhất 100%?
+

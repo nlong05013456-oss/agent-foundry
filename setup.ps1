@@ -8,7 +8,7 @@
     Hỗ trợ 2 chế độ chính:
       1. Cài đặt theo Preset:
          - -Preset base: Chỉ cài file mẫu AGENTS.md tại gốc dự án đích.
-         - -Preset web : Trọn bộ cho Web Development (8 skills, 2 rules, learnings).
+         - -Preset web : Trọn bộ cho Web Development (9 skills, 2 rules, learnings).
          - -Preset all : Toàn bộ kho cấu hình (bao gồm AGENTS.md và toàn bộ skills/rules).
       2. Cài đặt chọn lọc từng mục:
          - -Skills <danh sách>: Cài toàn bộ thư mục của skill đã chọn.
