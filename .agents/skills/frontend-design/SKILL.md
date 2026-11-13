@@ -114,3 +114,4 @@ Mọi dự án UI phải khai báo và sử dụng hệ thống Design Tokens:
 - [ ] Hiệu ứng chuyển động mượt, không giật lag?
 - [ ] Đã kiểm tra hiển thị responsive ở 375px, 768px, 1200px?
 - [ ] Đầy đủ `alt` cho hình ảnh và semantic tags (`<header>`, `<nav>`, `<main>`, `<footer>`)?
+

@@ -96,3 +96,4 @@ Mỗi khi kiểm thử một tính năng, PHẢI kiểm tra các kịch bản sa
   ```
 - **Lighthouse / Axe-core (Accessibility)**:
   - Kiểm tra độ tương phản màu sắc và thẻ ARIA hợp lệ.
+

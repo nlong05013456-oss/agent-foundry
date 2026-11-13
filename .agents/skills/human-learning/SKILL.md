@@ -89,3 +89,4 @@ Kết nối các điểm lại với nhau, tìm những nguyên tắc chung.
 
 Sau khi viết xong, AI thông báo:
 > "Đã tạo file learning tại: `.agents/learnings/human/...`. Bạn có thể đọc để review lại toàn bộ quá trình."
+

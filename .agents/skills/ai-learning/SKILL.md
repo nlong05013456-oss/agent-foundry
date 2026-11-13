@@ -134,3 +134,4 @@ AI quét toàn bộ conversation và phân loại thông tin có giá trị tái
    - Patterns: X entries
    Tổng: Y entries (Z mới, W cập nhật)
 ```
+

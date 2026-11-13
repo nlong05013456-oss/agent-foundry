@@ -109,3 +109,4 @@ Tóm tắt ngắn gọn:
 1. Những việc đã hoàn thành
 2. Learnings đã lưu (nếu có)
 3. Các bước tiếp theo hoặc lưu ý tồn đọng (nếu có)
+

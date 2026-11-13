@@ -3,25 +3,58 @@
     Script cài đặt bộ cấu hình Antigravity Starter vào dự án đích.
 
 .DESCRIPTION
-    Đưa các rules, skills, và templates chuẩn vào thư mục .agents/ của dự án đích.
-    Giữ nguyên toàn bộ mã nguồn của dự án, bỏ qua các file giống hệt, và cảnh báo
-    rõ ràng các file trùng nhưng khác nội dung để bảo vệ cấu hình hiện tại.
+    Đưa các rules, skills (kèm toàn bộ file phụ trong thư mục), và templates chuẩn
+    vào thư mục .agents/ của dự án đích.
+    Hỗ trợ 2 chế độ:
+      1. Cài đặt theo Preset: -Preset web (hoặc all)
+      2. Chọn từng mục: -Skills <danh sách> và/hoặc -Rules <danh sách>
+
+    Script giữ nguyên code dự án, bỏ qua file giống hệt nhau, và báo xung đột
+    rõ ràng nếu file cấu hình đã tồn tại có nội dung khác.
 
 .PARAMETER ProjectPath
-    Đường dẫn tới thư mục dự án đích (mặc định là thư mục hiện tại ".").
+    Đường dẫn tới thư mục dự án đích (mặc định: ".").
+
+.PARAMETER Preset
+    Tên gói cấu hình định sẵn:
+      - "web": Trọn bộ cho Web Development (frontend-design, webapp-testing, brainstorming, code-reviewer, find-bugs, plan, ai-learning, human-learning, kèm web-design-backbone, load-learnings).
+      - "all": Cài đặt toàn bộ kho skills và rules.
+
+.PARAMETER Skills
+    Mảng tên các skills cụ thể cần cài (VD: @("frontend-design", "webapp-testing")).
+    Toàn bộ thư mục con của skill (scripts, resources...) sẽ được sao chép đầy đủ.
+
+.PARAMETER Rules
+    Mảng tên các rules cụ thể cần cài (VD: @("web-design-backbone", "load-learnings")).
 
 .PARAMETER Overwrite
     Ghi đè file nếu có xung đột nội dung (mặc định giữ nguyên file của dự án).
 
 .EXAMPLE
-    .\setup.ps1 -ProjectPath "D:\MyProjects\AwesomeApp"
-    .\setup.ps1 -ProjectPath "." -Overwrite
+    # Cài đặt theo preset Web
+    .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Preset web
+
+    # Cài đặt chọn lọc từng skill và rule
+    .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Skills "frontend-design","webapp-testing" -Rules "web-design-backbone"
+
+    # Cài đặt ghi đè khi cần cập nhật cấu hình
+    .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Preset web -Overwrite
 #>
 
 [CmdletBinding()]
 param (
     [Parameter(Position = 0, Mandatory = $false)]
     [string]$ProjectPath = ".",
+
+    [Parameter(Mandatory = $false)]
+    [ValidateSet("web", "all")]
+    [string]$Preset,
+
+    [Parameter(Mandatory = $false)]
+    [string[]]$Skills,
+
+    [Parameter(Mandatory = $false)]
+    [string[]]$Rules,
 
     [switch]$Overwrite
 )
@@ -40,7 +73,7 @@ Write-ColorHost "`n=======================================================" Cyan
 Write-ColorHost "   ANTIGRAVITY STARTER - BỘ CÀI ĐẶT CẤU HÌNH DỰ ÁN     " Cyan
 Write-ColorHost "=======================================================`n" Cyan
 
-# 1. Xác định đường dẫn nguồn và đích
+# 1. Định vị thư mục nguồn và đích
 $sourceRoot = $PSScriptRoot
 $sourceAgents = Join-Path $sourceRoot ".agents"
 
@@ -49,25 +82,108 @@ if (-not (Test-Path $sourceAgents)) {
     exit 1
 }
 
-# Resolve target directory
 if (-not (Test-Path $ProjectPath)) {
-    Write-ColorHost "[THÔNG BÁO] Thư mục dự án đích chưa tồn tại, đang tạo: $ProjectPath" Yellow
+    Write-ColorHost "[THÔNG BÁO] Thư mục dự án đích chưa tồn tại, đang khởi tạo: $ProjectPath" Yellow
     New-Item -ItemType Directory -Force -Path $ProjectPath | Out-Null
 }
 
 $resolvedTarget = (Resolve-Path $ProjectPath).Path
 $targetAgents = Join-Path $resolvedTarget ".agents"
 
-Write-ColorHost "Thư mục nguồn bộ cài : $sourceAgents" Gray
-Write-ColorHost "Thư mục dự án đích   : $resolvedTarget" Gray
-Write-ColorHost "Thư mục đích .agents : $targetAgents`n" Gray
+# 2. Xác định danh sách Skills & Rules cần cài đặt
+$allAvailableSkills = (Get-ChildItem -Path (Join-Path $sourceAgents "skills") -Directory).Name
+$allAvailableRules = (Get-ChildItem -Path (Join-Path $sourceAgents "rules") -File | Where-Object { $_.Extension -eq ".md" }).BaseName
 
-if (-not (Test-Path $targetAgents)) {
-    New-Item -ItemType Directory -Force -Path $targetAgents | Out-Null
+$selectedSkills = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+$selectedRules = [System.Collections.Generic.HashSet[string]]::new([System.StringComparer]::OrdinalIgnoreCase)
+$installLearnings = $false
+
+# Phân giải chế độ
+$modeDescription = ""
+
+if ($PSBoundParameters.ContainsKey('Skills') -or $PSBoundParameters.ContainsKey('Rules')) {
+    $modeDescription = "Tùy chọn (Custom Selection)"
+    if ($Skills) {
+        foreach ($s in $Skills) {
+            $cleanName = $s.Trim()
+            if ($allAvailableSkills -contains $cleanName) {
+                [void]$selectedSkills.Add($cleanName)
+            } else {
+                Write-ColorHost "  [CẢNH BÁO] Không tìm thấy skill '$cleanName' trong kho bộ cài!" Yellow
+            }
+        }
+    }
+    if ($Rules) {
+        foreach ($r in $Rules) {
+            $cleanName = ($r.Trim() -replace '\.md$', '')
+            if ($allAvailableRules -contains $cleanName) {
+                [void]$selectedRules.Add($cleanName)
+            } else {
+                Write-ColorHost "  [CẢNH BÁO] Không tìm thấy rule '$cleanName' trong kho bộ cài!" Yellow
+            }
+        }
+    }
+}
+elseif ($Preset -eq "web" -or (-not $Preset -and -not $Skills -and -not $Rules)) {
+    $modeDescription = "Preset: 'web' (Mặc định cho phát triển Web Frontend / Fullstack)"
+    # Tất cả skills và rules phục vụ web
+    foreach ($s in $allAvailableSkills) { [void]$selectedSkills.Add($s) }
+    foreach ($r in $allAvailableRules) { [void]$selectedRules.Add($r) }
+    $installLearnings = $true
+}
+elseif ($Preset -eq "all") {
+    $modeDescription = "Preset: 'all' (Toàn bộ kho cấu hình)"
+    foreach ($s in $allAvailableSkills) { [void]$selectedSkills.Add($s) }
+    foreach ($r in $allAvailableRules) { [void]$selectedRules.Add($r) }
+    $installLearnings = $true
 }
 
-# 2. Duyệt qua tất cả các file nguồn và đồng bộ hóa
-$sourceFiles = Get-ChildItem -Path $sourceAgents -Recurse -File
+Write-ColorHost "Chế độ cài đặt        : $modeDescription" Gray
+Write-ColorHost "Thư mục nguồn bộ cài  : $sourceAgents" Gray
+Write-ColorHost "Thư mục dự án đích    : $resolvedTarget" Gray
+Write-ColorHost "Thư mục đích .agents  : $targetAgents" Gray
+Write-ColorHost "Skills đã chọn ($($selectedSkills.Count))     : $($selectedSkills -join ', ')" Gray
+Write-ColorHost "Rules đã chọn ($($selectedRules.Count))      : $($selectedRules -join ', ')`n" Gray
+
+if ($selectedSkills.Count -eq 0 -and $selectedRules.Count -eq 0) {
+    Write-ColorHost "[LỖI] Không có skill hay rule hợp lệ nào được chọn để cài đặt." Red
+    exit 1
+}
+
+# 3. Thu thập danh sách các file nguồn cần copy
+$filesToProcess = [System.Collections.Generic.List[System.IO.FileInfo]]::new()
+
+# Skills: Thu thập TOÀN BỘ thư mục của từng skill (kèm files phụ trong resources, scripts, references...)
+foreach ($skillName in $selectedSkills) {
+    $skillDir = Join-Path $sourceAgents "skills\$skillName"
+    if (Test-Path $skillDir) {
+        $skillFiles = Get-ChildItem -Path $skillDir -Recurse -File
+        foreach ($sf in $skillFiles) {
+            $filesToProcess.Add($sf)
+        }
+    }
+}
+
+# Rules: Thu thập các file rule được chọn
+foreach ($ruleName in $selectedRules) {
+    $ruleFile = Join-Path $sourceAgents "rules\$ruleName.md"
+    if (Test-Path $ruleFile) {
+        $filesToProcess.Add((Get-Item $ruleFile))
+    }
+}
+
+# Learnings nếu có trong preset
+if ($installLearnings) {
+    $learningsDir = Join-Path $sourceAgents "learnings"
+    if (Test-Path $learningsDir) {
+        $lFiles = Get-ChildItem -Path $learningsDir -Recurse -File
+        foreach ($lf in $lFiles) {
+            $filesToProcess.Add($lf)
+        }
+    }
+}
+
+# 4. Thực hiện sao chép và so sánh hash từng file
 $stats = @{
     Created = 0
     Identical = 0
@@ -76,11 +192,10 @@ $stats = @{
 }
 $conflictedFiles = @()
 
-foreach ($file in $sourceFiles) {
-    # Tính đường dẫn tương đối từ .agents
-    $relativeSubPath = $file.FullName.Substring($sourceAgents.Length).TrimStart('\', '/')
-    $displaySubPath = ".agents/" + ($relativeSubPath -replace '\\', '/')
-    $destFile = Join-Path $targetAgents $relativeSubPath
+foreach ($file in $filesToProcess) {
+    $relPath = $file.FullName.Substring($sourceAgents.Length).TrimStart('\', '/')
+    $displayPath = ".agents/" + ($relPath -replace '\\', '/')
+    $destFile = Join-Path $targetAgents $relPath
     $destDir = Split-Path -Parent $destFile
 
     if (-not (Test-Path $destDir)) {
@@ -88,49 +203,53 @@ foreach ($file in $sourceFiles) {
     }
 
     if (-not (Test-Path $destFile)) {
-        # File chưa tồn tại -> Cài mới
         Copy-Item -Path $file.FullName -Destination $destFile -Force
-        Write-ColorHost "  [TẠO MỚI] $displaySubPath" Green
+        Write-ColorHost "  [TẠO MỚI] $displayPath" Green
         $stats.Created++
     }
     else {
-        # File đã tồn tại -> Kiểm tra hash SHA256
         $srcHash = (Get-FileHash -Path $file.FullName -Algorithm SHA256).Hash
         $dstHash = (Get-FileHash -Path $destFile -Algorithm SHA256).Hash
 
         if ($srcHash -eq $dstHash) {
-            # File giống hệt nhau -> Bỏ qua
-            Write-ColorHost "  [BỎ QUA - GIỐNG HỆT] $displaySubPath" DarkGray
+            Write-ColorHost "  [BỎ QUA - GIỐNG HỆT] $displayPath" DarkGray
             $stats.Identical++
         }
         else {
-            # File trùng nhưng khác nội dung -> Cảnh báo xung đột
             if ($Overwrite) {
                 Copy-Item -Path $file.FullName -Destination $destFile -Force
-                Write-ColorHost "  [GHI ĐÈ THEO YÊU CẦU] $displaySubPath" Magenta
+                Write-ColorHost "  [GHI ĐÈ THEO YÊU CẦU] $displayPath" Magenta
                 $stats.Overwritten++
             }
             else {
-                Write-ColorHost "  [CẢNH BÁO - KHÁC NỘI DUNG] $displaySubPath" Yellow
-                Write-ColorHost "     -> Đã tồn tại trong dự án với nội dung khác. Giữ nguyên để tránh mất cấu hình!" Yellow
+                Write-ColorHost "  [CẢNH BÁO - KHÁC NỘI DUNG] $displayPath" Yellow
+                Write-ColorHost "     -> File đã tồn tại trong dự án nhưng nội dung khác với bộ cài! (Đã giữ nguyên file của dự án)" Yellow
                 $stats.Conflict++
-                $conflictedFiles += $displaySubPath
+                $conflictedFiles += $displayPath
             }
         }
     }
 }
 
-# 3. Kiểm tra các công cụ hệ thống hỗ trợ skills
-Write-ColorHost "`n--- Kiểm tra công cụ môi trường cho Skills ---" Cyan
+# 5. Kiểm tra các công cụ hệ thống dựa trên skills được cài
+Write-ColorHost "`n--- Kiểm tra công cụ môi trường cho Skills đã cài ---" Cyan
 
-$toolsToCheck = @(
-    @{ Name = "Git"; Command = "git"; Reason = "Cần cho skills 'find-bugs', 'code-reviewer'" },
-    @{ Name = "Node.js"; Command = "node"; Reason = "Cần cho skills 'webapp-testing', 'frontend-design'" },
-    @{ Name = "npm / npx"; Command = "npm"; Reason = "Cần cho chạy Playwright, Vitest trong 'webapp-testing'" }
-)
+$needGit = $selectedSkills.Contains("find-bugs") -or $selectedSkills.Contains("code-reviewer")
+$needNode = $selectedSkills.Contains("frontend-design") -or $selectedSkills.Contains("webapp-testing")
+$needNpm = $selectedSkills.Contains("webapp-testing")
+
+$toolsToCheck = @()
+if ($needGit) {
+    $toolsToCheck += @{ Name = "Git"; Command = "git"; Reason = "Cần cho skill 'find-bugs' (git diff) và 'code-reviewer'" }
+}
+if ($needNode) {
+    $toolsToCheck += @{ Name = "Node.js"; Command = "node"; Reason = "Cần cho 'webapp-testing' và 'frontend-design'" }
+}
+if ($needNpm) {
+    $toolsToCheck += @{ Name = "npm / npx"; Command = "npm"; Reason = "Cần để chạy Playwright / Vitest trong 'webapp-testing'" }
+}
 
 $missingTools = @()
-
 foreach ($tool in $toolsToCheck) {
     $exists = Get-Command $tool.Command -ErrorAction SilentlyContinue
     if ($exists) {
@@ -144,10 +263,12 @@ foreach ($tool in $toolsToCheck) {
 
 if ($missingTools.Count -gt 0) {
     Write-ColorHost "`n[LƯU Ý]: Phát hiện thiếu công cụ: $($missingTools -join ', ')." Yellow
-    Write-ColorHost "Vui lòng xem hướng dẫn cài đặt chi tiết trong file README.md." Yellow
+    Write-ColorHost "Vui lòng xem bảng hướng dẫn cài đặt chi tiết trong file README.md." Yellow
+} elseif ($toolsToCheck.Count -gt 0) {
+    Write-ColorHost "  Tất cả công cụ cần thiết cho các skills đã chọn đều sẵn sàng!" Green
 }
 
-# 4. Báo cáo tổng kết
+# 6. Báo cáo tổng kết
 Write-ColorHost "`n=======================================================" Cyan
 Write-ColorHost "                 KẾT QUẢ THIẾT LẬP                     " Cyan
 Write-ColorHost "=======================================================" Cyan
@@ -158,10 +279,10 @@ if ($stats.Conflict -gt 0) {
     foreach ($cf in $conflictedFiles) {
         Write-ColorHost "      * $cf" Yellow
     }
-    Write-ColorHost "  (Gợi ý: Thêm tham số -Overwrite nếu bạn muốn ghi đè các file trên)`n" Gray
+    Write-ColorHost "  (Gợi ý: Thêm cờ -Overwrite nếu bạn muốn ghi đè các file trên theo chuẩn bộ cài)`n" Gray
 }
 if ($stats.Overwritten -gt 0) {
     Write-ColorHost "  - File đã ghi đè     : $($stats.Overwritten)" Magenta
 }
 
-Write-ColorHost "`nThiết lập hoàn tất cho dự án tại: $resolvedTarget`n" Green
+Write-ColorHost "`nCài đặt hoàn tất cho dự án tại: $resolvedTarget`n" Green
