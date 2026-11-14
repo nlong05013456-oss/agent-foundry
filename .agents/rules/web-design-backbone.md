@@ -1,6 +1,6 @@
 ---
 description: Rule cốt lõi bắt buộc về thiết kế web. AI agent PHẢI tuân thủ 100% khi tạo/chỉnh sửa file web.
-globs: "**/*.html, **/*.css, **/*.js, **/*.jsx, **/*.tsx, **/*.ts, **/*.vue, **/*.svelte, **/*.astro"
+globs: "**/*.html, **/*.css, **/*.scss, **/*.jsx, **/*.tsx, **/*.vue, **/*.svelte, **/*.astro"
 trigger: glob
 ---
 
@@ -12,6 +12,8 @@ trigger: glob
 
 # Web Design Backbone Rule
 
+> Áp dụng khi tạo giao diện mới. Khi sửa nhỏ thì giữ nhất quán với code hiện có, không áp checklist cuối.
+>
 > **LUẬT KHÔNG THỂ THƯƠNG LƯỢNG.** Vi phạm bất kỳ mục nào → sản phẩm **FAILED**.
 
 ## 1. Design Philosophy — Triết lý thiết kế
@@ -87,7 +89,7 @@ trigger: glob
 ## 7. Responsive Design — Thiết kế đáp ứng
 
 - **Mobile-first**: CSS mobile trước, `min-width` media query mở rộng.
-- Breakpoints: 640px (tablet) → 1024px (laptop) → 1280px (desktop) → 1536px (wide).
+- Breakpoints: 768px (tablet) → 1024px (laptop) → 1280px (desktop) → 1536px (wide).
 - Fluid heading: `font-size: clamp(2rem, 5vw, 4.5rem)`.
 - Touch target ≥ 44x44px. Ảnh: `max-width: 100%; height: auto`.
 - ❌ KHÔNG BAO GIỜ scroll ngang trên mobile. Không pixel cố định cho layout width.
@@ -102,7 +104,7 @@ trigger: glob
 
 ## 9. Image & Media — Hình ảnh & Đa phương tiện
 
-- KHÔNG placeholder trống — dùng `generate_image` tool nếu cần ảnh.
+- KHÔNG placeholder trống — dùng `generate_image` nếu có.
 - Nội dung thực hoặc mẫu có ý nghĩa, KHÔNG Lorem ipsum.
 - `alt` text bắt buộc. `loading="lazy"` cho ảnh dưới fold.
 - Icon: SVG inline hoặc icon font (Lucide, Phosphor). KHÔNG PNG cho icon.
@@ -119,7 +121,7 @@ trigger: glob
 
 - CSS theo thứ tự: Reset → Tokens → Base → Layout → Components → Utilities → Animations → Responsive.
 - Class: `kebab-case`. ID: `camelCase`. BEM cho component phức tạp.
-- File structure: `index.html` + `css/` + `js/` + `assets/images,icons,fonts/`.
+- File structure: Với dự án HTML thuần: `index.html` + `css/` + `js/` + `assets/images,icons,fonts/`; với framework (React, Vue, Next.js, Vite...) thì tuân thủ cấu trúc của framework.
 - ❌ Không CSS dư thừa, trùng lặp. Không hardcode giá trị — dùng CSS variable.
 
 ## 12. Checklist bắt buộc trước khi hoàn thành — Danh sách kiểm tra cuối cùng
