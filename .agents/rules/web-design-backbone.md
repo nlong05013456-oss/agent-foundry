@@ -1,7 +1,7 @@
 ---
 description: Rule cốt lõi bắt buộc về thiết kế web. AI agent PHẢI tuân thủ 100% khi tạo/chỉnh sửa file web.
-globs: "**/*.{html,css,js,jsx,tsx,ts,vue,svelte,astro}"
-trigger: always_on
+globs: "**/*.html, **/*.css, **/*.js, **/*.jsx, **/*.tsx, **/*.ts, **/*.vue, **/*.svelte, **/*.astro"
+trigger: glob
 ---
 
 <!-- 

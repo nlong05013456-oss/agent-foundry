@@ -26,6 +26,11 @@ SOURCE="${SCRIPT_DIR}/.agents"
 mkdir -p "$PROJECT_PATH"
 DEST="$(cd "$PROJECT_PATH" && pwd)/.agents"
 
+if [ -n "$PRESET" ] && [ "$PRESET" != "web" ]; then
+    echo "Lỗi: Preset không hợp lệ. Chỉ hỗ trợ preset 'web'."
+    exit 1
+fi
+
 ALL_SKILLS=($(find "${SOURCE}/skills" -mindepth 1 -maxdepth 1 -type d -exec basename {} \;))
 ALL_RULES=($(find "${SOURCE}/rules" -mindepth 1 -maxdepth 1 -name "*.md" -exec basename {} .md \;))
 
