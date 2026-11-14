@@ -1,7 +1,7 @@
 ﻿# Agent Foundry - Script cai dat cau hinh
 param (
     [Parameter(Position = 0)][string]$ProjectPath = ".",
-    [ValidateSet("web", "all")][string]$Preset,
+    [ValidateSet("web")][string]$Preset,
     [string[]]$Skills,
     [string[]]$Rules,
     [switch]$Overwrite

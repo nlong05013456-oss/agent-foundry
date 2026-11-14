@@ -4,19 +4,25 @@ Bộ cài cấu hình tinh gọn cho **Google Antigravity / AI Agent**, giúp ch
 
 ## ⚡ Cài đặt nhanh
 
+```bash
+# 1. Tải kho cấu hình về máy:
+git clone https://github.com/nlong05013456-oss/agent-foundry
+cd agent-foundry
+```
+
 ```powershell
-# Windows (PowerShell) - Cài trọn bộ hoặc chọn lọc:
-.\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Preset web
+# 2. Windows (PowerShell) - Dùng ExecutionPolicy Bypass nếu hệ thống chặn script:
+powershell -ExecutionPolicy Bypass -File .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Preset web
 .\setup.ps1 -ProjectPath "D:\Projects\MyApp" -Skills "frontend-design" -Rules "web-design-backbone"
 ```
 
 ```bash
-# Linux / macOS / Git Bash - Cài trọn bộ hoặc chọn lọc:
+# 2. Linux / macOS / Git Bash:
 bash setup.sh -p /path/to/project -P web
 bash setup.sh -p /path/to/project -s "frontend-design" -r "web-design-backbone"
 ```
 
-> Thêm cờ `-Overwrite` (PowerShell) hoặc `-o` (Bash) nếu muốn ghi đè các file đã có.
+> File cấu hình được đưa vào `.agents/skills/` và `.agents/rules/` trong dự án đích (chuẩn Antigravity 2.0+). Thêm cờ `-Overwrite` (PowerShell) hoặc `-o` (Bash) nếu muốn ghi đè file đã có.
 
 ## 📦 Bảng tra cứu Skills & Rules
 
@@ -34,12 +40,12 @@ bash setup.sh -p /path/to/project -s "frontend-design" -r "web-design-backbone"
 | `web-design-backbone` | Rule | Quy chuẩn thiết kế web bắt buộc (Google Fonts, spacing 4px/8px, WCAG) |
 | `load-learnings` | Rule | Tự động đọc các bài học liên quan trong `.agents/learnings/` đầu mỗi phiên |
 
-> 💡 **Quy tắc cho Agent**:
-> - **Ghép nhiều việc**: Khi người dùng yêu cầu nhiều việc (ví dụ: *"làm lại UI rồi test nút đăng nhập"*), hãy cài đủ các mục tương ứng (`frontend-design`, `web-design-backbone`, `webapp-testing`).
-> - **Việc nhỏ, đơn giản**: Khi chỉ yêu cầu sửa việc nhỏ (sửa lỗi chính tả, đổi chữ trên nút, sửa một tên biến), hãy **xử lý trực tiếp** không cần cài thêm cấu hình.
-> - **Phụ thuộc**: Skill `plan` cần `brainstorming` và `ai-learning`; khuyến nghị dùng preset `web` để cài đủ bộ.
+> 💡 **Lưu ý phụ thuộc**: Skill `plan` cần `brainstorming` và `ai-learning`. Cài đủ bộ bằng lệnh:
+> `.\setup.ps1 -ProjectPath "." -Skills "plan","brainstorming","ai-learning"` *(hoặc `bash setup.sh -p . -s "plan,brainstorming,ai-learning"`)*
+
+> 💡 **Quy tắc cho Agent**: Khi người dùng yêu cầu nhiều việc (ví dụ: *"làm lại UI rồi test nút đăng nhập"*), hãy cài đủ các mục tương ứng; với việc nhỏ đơn giản (sửa typo, đổi chữ nút), hãy **xử lý trực tiếp** không cần cài thêm cấu hình.
 
 ## 🛠️ Yêu cầu & Bản quyền
 
-- **Yêu cầu môi trường**: Git (cho `find-bugs`, `code-reviewer`) và Node.js (cho web dev/testing).
+- **Yêu cầu môi trường**: Git (cho `find-bugs`, `code-reviewer`), Node.js và Playwright / Vitest (cho `webapp-testing`, `frontend-design`).
 - **Bản quyền**: Giấy phép chính [MIT License](LICENSE). Thông tin nguồn gốc chi tiết xem tại [NOTICE.md](NOTICE.md).
