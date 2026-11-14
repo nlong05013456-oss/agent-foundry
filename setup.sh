@@ -1,5 +1,6 @@
 #!/usr/bin/env bash
 set -e
+export PATH="/usr/bin:/bin:$PATH"
 
 PROJECT_PATH="."
 PRESET=""

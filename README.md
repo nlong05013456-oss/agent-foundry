@@ -11,16 +11,16 @@ Bộ cài cấu hình tinh gọn cho **Google Antigravity / AI Agent**, giúp ch
 ```
 
 ```bash
-# Linux / macOS (Bash) - Cài trọn bộ hoặc chọn lọc:
-./setup.sh -p /path/to/project -P web
-./setup.sh -p /path/to/project -s "frontend-design" -r "web-design-backbone"
+# Linux / macOS / Git Bash - Cài trọn bộ hoặc chọn lọc:
+bash setup.sh -p /path/to/project -P web
+bash setup.sh -p /path/to/project -s "frontend-design" -r "web-design-backbone"
 ```
 
 > Thêm cờ `-Overwrite` (PowerShell) hoặc `-o` (Bash) nếu muốn ghi đè các file đã có.
 
-## 📦 Danh mục Skills & Rules
+## 📦 Bảng tra cứu Skills & Rules
 
-| Tên mục | Loại | Mô tả & Cách gọi tự nhiên |
+| Tên mục | Loại | Yêu cầu / Cách gọi tự nhiên |
 |---|---|---|
 | `frontend-design` | Skill | Thiết kế UI/UX hiện đại, responsive, Design Tokens (*"làm giao diện đẹp"*) |
 | `webapp-testing` | Skill | Kịch bản kiểm thử E2E Playwright, Unit test Vitest (*"test nút đăng nhập"*) |
@@ -34,7 +34,10 @@ Bộ cài cấu hình tinh gọn cho **Google Antigravity / AI Agent**, giúp ch
 | `web-design-backbone` | Rule | Quy chuẩn thiết kế web bắt buộc (Google Fonts, spacing 4px/8px, WCAG) |
 | `load-learnings` | Rule | Tự động đọc các bài học liên quan trong `.agents/learnings/` đầu mỗi phiên |
 
-> 💡 **Lưu ý phụ thuộc**: Skill `plan` cần `brainstorming` và `ai-learning`; khuyến nghị dùng preset `web` để cài đủ bộ.
+> 💡 **Quy tắc cho Agent**:
+> - **Ghép nhiều việc**: Khi người dùng yêu cầu nhiều việc (ví dụ: *"làm lại UI rồi test nút đăng nhập"*), hãy cài đủ các mục tương ứng (`frontend-design`, `web-design-backbone`, `webapp-testing`).
+> - **Việc nhỏ, đơn giản**: Khi chỉ yêu cầu sửa việc nhỏ (sửa lỗi chính tả, đổi chữ trên nút, sửa một tên biến), hãy **xử lý trực tiếp** không cần cài thêm cấu hình.
+> - **Phụ thuộc**: Skill `plan` cần `brainstorming` và `ai-learning`; khuyến nghị dùng preset `web` để cài đủ bộ.
 
 ## 🛠️ Yêu cầu & Bản quyền
 
