@@ -155,6 +155,18 @@ else {
     foreach ($r in $allAvailableRules) { [void]$selectedRules.Add($r) }
 }
 
+# 2.1. Tự động giải quyết phụ thuộc kỹ năng (Skill Dependencies)
+if ($selectedSkills.Contains("plan")) {
+    if (-not $selectedSkills.Contains("brainstorming")) {
+        [void]$selectedSkills.Add("brainstorming")
+        Write-ColorHost "  [TỰ ĐỘNG BỔ SUNG PHỤ THUỘC] Kỹ năng 'plan' cần 'brainstorming' để thực hiện Pha 1 (Brainstorming)." Yellow
+    }
+    if (-not $selectedSkills.Contains("ai-learning")) {
+        [void]$selectedSkills.Add("ai-learning")
+        Write-ColorHost "  [TỰ ĐỘNG BỔ SUNG PHỤ THUỘC] Kỹ năng 'plan' cần 'ai-learning' để thực hiện Pha 3 (Save Learnings)." Yellow
+    }
+}
+
 Write-ColorHost "Chế độ cài đặt        : $modeDescription" Gray
 Write-ColorHost "Thư mục nguồn bộ cài  : $sourceAgents" Gray
 Write-ColorHost "Thư mục dự án đích    : $resolvedTarget" Gray
@@ -248,6 +260,10 @@ if ($selectedSkills.Count -gt 0 -or $selectedRules.Count -gt 0) {
     $targetLearningsDir = Join-Path $targetAgents "learnings"
     if (-not (Test-Path $targetLearningsDir)) {
         New-Item -ItemType Directory -Force -Path $targetLearningsDir | Out-Null
+    }
+    $gitkeepPath = Join-Path $targetLearningsDir ".gitkeep"
+    if (-not (Test-Path $gitkeepPath)) {
+        New-Item -ItemType File -Force -Path $gitkeepPath | Out-Null
     }
 }
 

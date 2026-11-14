@@ -38,20 +38,25 @@ OVERWRITE=false
 usage() {
     cat << EOF
 Cách sử dụng:
-  ./setup.sh [-p <path>] [--preset <base|web|all>] [-s <skill1,skill2>] [-r <rule1,rule2>] [-o]
+  ./setup.sh [-p <path>] [-P <base|web|all>] [-s <skill1,skill2>] [-r <rule1,rule2>] [-o]
 
 Các tùy chọn:
   -p, --project <path>    Đường dẫn tới dự án đích (mặc định: ".")
-  --preset <name>         Gói cấu hình định sẵn: "base", "web", hoặc "all"
-  -s, --skills <list>     Danh sách kỹ năng cần cài (phân tách bởi dấu phẩy)
-  -r, --rules <list>      Danh sách quy tắc cần cài (phân tách bởi dấu phẩy)
+  -P, --preset <name>     Gói cấu hình định sẵn: "base", "web", hoặc "all"
+  -s, --skills <list>     Danh sách kỹ năng cần cài (phân tách bởi dấu phẩy hoặc dấu cách)
+  -r, --rules <list>      Danh sách quy tắc cần cài (phân tách bởi dấu phẩy hoặc dấu cách)
   -o, --overwrite         Ghi đè file nếu có xung đột nội dung
   -h, --help              Hiển thị trợ giúp này
 
 Ví dụ:
-  ./setup.sh -p /path/to/my-project --preset base
-  ./setup.sh -p /path/to/my-project -s "frontend-design" -r "web-design-backbone"
-  ./setup.sh -p /path/to/my-project --preset web
+  # Cài đặt nền tảng:
+  ./setup.sh -p /path/to/project -P base
+  
+  # Cài đặt chọn lọc nhiều kỹ năng và quy tắc:
+  ./setup.sh -p /path/to/project -s "frontend-design,webapp-testing" -r "web-design-backbone,load-learnings"
+  
+  # Cài đặt trọn bộ web:
+  ./setup.sh -p /path/to/project -P web
 EOF
     exit 0
 }
@@ -63,24 +68,28 @@ while [[ $# -gt 0 ]]; do
             PROJECT_PATH="$2"
             shift 2
             ;;
-        --preset)
+        -P|--preset)
             PRESET="$2"
             shift 2
             ;;
         -s|--skills)
             IFS=',' read -r -a SKILLS_IN <<< "$2"
             for s in "${SKILLS_IN[@]}"; do
-                s_trimmed=$(echo "$s" | xargs)
-                [ -n "$s_trimmed" ] && SKILLS+=("$s_trimmed")
+                for item in $s; do
+                    s_trimmed=$(echo "$item" | xargs)
+                    [ -n "$s_trimmed" ] && SKILLS+=("$s_trimmed")
+                done
             done
             shift 2
             ;;
         -r|--rules)
             IFS=',' read -r -a RULES_IN <<< "$2"
             for r in "${RULES_IN[@]}"; do
-                r_trimmed=$(echo "$r" | xargs)
-                r_trimmed="${r_trimmed%.md}"
-                [ -n "$r_trimmed" ] && RULES+=("$r_trimmed")
+                for item in $r; do
+                    r_trimmed=$(echo "$item" | xargs)
+                    r_trimmed="${r_trimmed%.md}"
+                    [ -n "$r_trimmed" ] && RULES+=("$r_trimmed")
+                done
             done
             shift 2
             ;;
@@ -178,6 +187,26 @@ else
     SELECTED_RULES=("${ALL_AVAILABLE_RULES[@]}")
 fi
 
+# Tự động giải quyết phụ thuộc kỹ năng (Skill Dependencies)
+has_skill() {
+    local target="$1"
+    for item in "${SELECTED_SKILLS[@]}"; do
+        if [ "$item" = "$target" ]; then return 0; fi
+    done
+    return 1
+}
+
+if has_skill "plan"; then
+    if ! has_skill "brainstorming"; then
+        SELECTED_SKILLS+=("brainstorming")
+        echo -e "${YELLOW}  [TỰ ĐỘNG BỔ SUNG PHỤ THUỘC] Kỹ năng 'plan' cần 'brainstorming' để thực hiện Pha 1 (Brainstorming).${NC}"
+    fi
+    if ! has_skill "ai-learning"; then
+        SELECTED_SKILLS+=("ai-learning")
+        echo -e "${YELLOW}  [TỰ ĐỘNG BỔ SUNG PHỤ THUỘC] Kỹ năng 'plan' cần 'ai-learning' để thực hiện Pha 3 (Save Learnings).${NC}"
+    fi
+fi
+
 echo -e "${GRAY}Chế độ cài đặt        : ${MODE_DESC}${NC}"
 echo -e "${GRAY}Thư mục nguồn bộ cài  : ${SOURCE_AGENTS}${NC}"
 echo -e "${GRAY}Thư mục dự án đích    : ${TARGET_DIR}${NC}"
@@ -251,6 +280,9 @@ fi
 # Đảm bảo thư mục lưu bài học .agents/learnings tồn tại
 if [ ${#SELECTED_SKILLS[@]} -gt 0 ] || [ ${#SELECTED_RULES[@]} -gt 0 ]; then
     mkdir -p "${TARGET_AGENTS}/learnings"
+    if [ ! -f "${TARGET_AGENTS}/learnings/.gitkeep" ]; then
+        touch "${TARGET_AGENTS}/learnings/.gitkeep"
+    fi
 fi
 
 # Sao chép các Skills đã chọn
