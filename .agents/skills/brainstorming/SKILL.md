@@ -6,7 +6,13 @@ source: community
 date_added: "2026-02-27"
 ---
 
-<!-- Adapted from quang26071999/demo_landing_page -->
+<!-- 
+  Origin Chain:
+  1. Root: obra/superpowers (skills/brainstorming/SKILL.md) by Jesse Vincent (MIT License)
+  2. Intermediate: benjaminasterA/antigravity-awesome-skills (MIT License)
+  3. Intermediate: quang26071999/demo_landing_page (No license file) - Vietnamese translation
+  4. Current: agent-foundry (Cleaned, refactored, and maintained)
+-->
 
 # Chuyển đổi ý tưởng thành thiết kế
 

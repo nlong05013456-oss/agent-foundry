@@ -5,7 +5,13 @@ risk: unknown
 source: community
 ---
 
-<!-- Adapted from quang26071999/demo_landing_page -->
+<!-- 
+  Origin Chain:
+  1. Root: getsentry/skills (plugins/sentry-skills/skills/find-bugs) by Functional Software, Inc. (Apache License 2.0)
+  2. Intermediate: benjaminasterA/antigravity-awesome-skills (MIT License)
+  3. Intermediate: quang26071999/demo_landing_page (No license file) - Vietnamese translation
+  4. Current: agent-foundry (Cleaned, refactored, and maintained under Apache-2.0 / open terms)
+-->
 
 # Tìm Bug
 

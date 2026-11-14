@@ -3,7 +3,11 @@ name: human-learning
 description: "Tạo tài liệu giải thích chi tiết dạng 'coffee talk' để developer hiểu sâu kiến trúc, trade-offs và bài học từ task vừa thực hiện"
 ---
 
-<!-- Adapted from quang26071999/demo_landing_page -->
+<!-- 
+  Origin Chain:
+  1. Upstream: quang26071999/demo_landing_page (.agent/workflows/human-learning.md) (No license file)
+  2. Current: agent-foundry (Converted from legacy workflow to modern Antigravity skill, refactored)
+-->
 
 # Human Learning Skill
 

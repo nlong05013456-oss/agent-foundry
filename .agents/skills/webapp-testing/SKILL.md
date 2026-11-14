@@ -3,6 +3,12 @@ name: webapp-testing
 description: "Chuyên gia kiểm thử ứng dụng Web: End-to-End (Playwright/Cypress), Component testing, API mocking và kiểm tra chất lượng toàn diện"
 ---
 
+<!-- 
+  Origin:
+  - Testing concept & skill naming inspired by anthropics/skills (skills/webapp-testing) by Anthropic, PBC (Apache License 2.0).
+  - Test pyramid, TypeScript Playwright & Vitest templates, accessibility assertions, and Vietnamese instructions are original work created for agent-foundry.
+-->
+
 # Web App Testing Skill
 
 Quy trình và chuẩn mực kiểm thử phần mềm ứng dụng Web toàn diện, từ Unit, Component đến End-to-End (E2E), kiểm thử hiệu năng, độ tin cậy và khả năng tiếp cận (Accessibility).

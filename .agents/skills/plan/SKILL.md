@@ -3,7 +3,11 @@ name: plan
 description: "Quy trình thực thi task lập trình toàn diện: Brainstorming → Execution → Tự động lưu Learnings"
 ---
 
-<!-- Adapted from quang26071999/demo_landing_page -->
+<!-- 
+  Origin Chain:
+  1. Upstream: quang26071999/demo_landing_page (.agent/workflows/plan.md) (No license file)
+  2. Current: agent-foundry (Converted from legacy workflow to modern Antigravity skill, refactored with gate checks)
+-->
 
 # Plan & Execute Skill
 

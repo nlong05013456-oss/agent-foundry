@@ -4,7 +4,11 @@ globs: "**/*.{html,css,js,jsx,tsx,ts,vue,svelte,astro}"
 trigger: always_on
 ---
 
-<!-- Adapted from quang26071999/demo_landing_page -->
+<!-- 
+  Origin:
+  1. Upstream: quang26071999/demo_landing_page (.agent/rules/web-design-backbone.md) (No license file)
+  2. Current: agent-foundry (Refactored and maintained)
+-->
 
 # Web Design Backbone Rule
 

@@ -3,6 +3,11 @@ name: organize-project
 description: "Chuyên gia rà soát, dọn dẹp và tổ chức cấu trúc thư mục dự án theo chuẩn kiến trúc sạch, an toàn và dễ bảo trì"
 ---
 
+<!-- 
+  Origin:
+  - Original work created specifically for agent-foundry by nlong05013456-oss.
+-->
+
 # Organize Project Skill
 
 Hướng dẫn quy trình chuyên nghiệp để rà soát, dọn dẹp và tái cấu trúc cây thư mục của dự án phần mềm, bảo đảm dự án gọn gàng, tuân thủ cấu trúc chuẩn của từng hệ sinh thái và không làm hỏng các đường dẫn import.

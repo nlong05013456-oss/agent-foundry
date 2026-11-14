@@ -6,7 +6,12 @@ source: community
 date_added: "2026-02-27"
 ---
 
-<!-- Adapted from quang26071999/demo_landing_page -->
+<!-- 
+  Origin Chain:
+  1. Root: benjaminasterA/antigravity-awesome-skills & sickn33/agentic-awesome-skills (MIT License)
+  2. Intermediate: quang26071999/demo_landing_page (No license file) - Vietnamese translation & playbook
+  3. Current: agent-foundry (Cleaned, refactored, and maintained)
+-->
 
 ## Sử dụng skill này khi
 

@@ -4,7 +4,11 @@ globs: "**/*"
 trigger: always_on
 ---
 
-<!-- Adapted from quang26071999/demo_landing_page -->
+<!-- 
+  Origin:
+  1. Upstream: quang26071999/demo_landing_page (.agent/rules/load-learnings.md) (No license file)
+  2. Current: agent-foundry (Refactored and maintained)
+-->
 
 # Load Learnings Rule
 

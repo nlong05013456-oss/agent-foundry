@@ -3,7 +3,11 @@ name: ai-learning
 description: "Trích xuất kiến thức, quyết định kiến trúc, bugs và patterns từ conversation hiện tại và lưu vào .agents/learnings/"
 ---
 
-<!-- Adapted from quang26071999/demo_landing_page -->
+<!-- 
+  Origin Chain:
+  1. Upstream: quang26071999/demo_landing_page (.agent/workflows/ai-learning.md) (No license file)
+  2. Current: agent-foundry (Converted from legacy workflow to modern Antigravity skill, refactored)
+-->
 
 # AI Learning Skill
 

@@ -3,6 +3,12 @@ name: frontend-design
 description: "Chuyên gia thiết kế và xây dựng giao diện frontend đẳng cấp, hiện đại, chuẩn UI/UX, responsive và tương tác mượt mà"
 ---
 
+<!-- 
+  Origin:
+  - Design philosophy & aesthetic direction inspired by anthropics/skills (skills/frontend-design) by Anthropic, PBC (Apache License 2.0).
+  - Implementation, CSS design tokens, typography scale, spacing rules, and Vietnamese instructions are original work created for agent-foundry.
+-->
+
 # Frontend Design Skill
 
 Hướng dẫn toàn diện cho việc thiết kế và lập trình giao diện Web Frontend đạt đẳng cấp cao nhất (tương đương Apple, Stripe, Linear), tuân thủ nghiêm ngặt nguyên lý thiết kế và trải nghiệm người dùng.
