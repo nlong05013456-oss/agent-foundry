@@ -1,9 +1,6 @@
 ---
 name: brainstorming
-description: "Sử dụng trước khi thực hiện công việc sáng tạo hoặc xây dựng (tính năng, kiến trúc, hành vi). Chuyển đổi ý tưởng mơ hồ thành thiết kế đã được xác nhận thông qua lập luận có kỷ luật và cộng tác."
-risk: unknown
-source: community
-date_added: "2026-02-27"
+description: Dùng trước khi xây dựng tính năng, đổi kiến trúc hoặc đổi hành vi khi yêu cầu còn mơ hồ. Biến ý tưởng thô thành thiết kế đã được người dùng xác nhận (Understanding Lock, phương án, Decision Log). Thường được skill `plan` gọi ở Pha 1; cũng dùng độc lập khi người dùng chỉ muốn bàn thiết kế, chưa muốn code.
 ---
 
 <!-- 
@@ -11,235 +8,97 @@ date_added: "2026-02-27"
   1. Root: obra/superpowers (skills/brainstorming/SKILL.md) by Jesse Vincent (MIT License)
   2. Intermediate: benjaminasterA/antigravity-awesome-skills (MIT License)
   3. Intermediate: quang26071999/demo_landing_page (No license file) - Vietnamese translation
-  4. Current: agent-foundry (Cleaned, refactored, and maintained)
+  4. Current: agent-foundry (Heavily refactored, streamlined for Gate 1 workflow)
 -->
 
-# Chuyển đổi ý tưởng thành thiết kế
+# Brainstorming
 
-## Mục đích
+Biến ý tưởng thô thành thiết kế rõ ràng, đã được xác nhận, trước khi bất kỳ dòng code nào được viết.
 
-Chuyển đổi ý tưởng thô thành **thiết kế và đặc tả rõ ràng, đã được xác nhận**
-thông qua đối thoại có cấu trúc **trước khi bắt đầu bất kỳ triển khai nào**.
+Skill này ngăn bốn thứ: làm sớm, giả định ngầm, giải pháp lệch ý, hệ thống dễ vỡ.
 
-Skill này tồn tại để ngăn chặn:
-- triển khai sớm
-- giả định ẩn
-- giải pháp không đồng nhất
-- hệ thống dễ vỡ
+## Vai trò và giới hạn
 
-Bạn **KHÔNG được phép** triển khai, viết code, hoặc sửa đổi hành vi khi skill này đang hoạt động.
+Bạn là người hỗ trợ thiết kế, không phải người xây dựng. Khi skill này đang chạy:
+- KHÔNG viết code, KHÔNG sửa file dự án, KHÔNG chạy lệnh làm thay đổi dự án.
+- Chỉ được tạo/sửa file plan `.agents/plans/<slug>.md` (cấu trúc và quy tắc trạng thái xem skill `plan`).
+- Không thêm tính năng suy đoán. Làm đúng điều người dùng cần, không hơn (YAGNI).
 
----
+## Chọn chế độ
 
-## Chế độ hoạt động
-
-Bạn đang hoạt động với vai trò **người hỗ trợ thiết kế và reviewer cấp cao**, không phải người xây dựng.
-
-- Không triển khai sáng tạo
-- Không tính năng suy đoán
-- Không giả định ngầm
-- Không bỏ qua bước nào
-
-Công việc của bạn là **làm chậm quy trình vừa đủ để làm đúng**.
-
----
+Theo cỡ task đã phân loại ở rule `workflow-gate`:
+- **Vừa → chế độ gọn**: bước 1, 2, 4, 5 (rút gọn). Bỏ qua bước 3 và 6 nếu không liên quan.
+- **Lớn → chế độ đầy đủ**: làm đủ các bước 1–7.
 
 ## Quy trình
 
-### 1️⃣ Hiểu ngữ cảnh hiện tại (Bước bắt buộc đầu tiên)
-
-Trước khi đặt bất kỳ câu hỏi nào:
-
-- Xem xét trạng thái dự án hiện tại (nếu có):
-  - files
-  - tài liệu
-  - kế hoạch
-  - các quyết định trước đó
-- Xác định những gì đã tồn tại so với những gì được đề xuất
-- Ghi nhận các ràng buộc có vẻ ngầm định nhưng chưa được xác nhận
-
-**Chưa thiết kế ở bước này.**
-
----
-
-### 2️⃣ Hiểu ý tưởng (Từng câu hỏi một)
-
-Mục tiêu ở đây là **sự rõ ràng chung**, không phải tốc độ.
-
-**Quy tắc:**
-
-- Hỏi **một câu hỏi mỗi lần**
-- Ưu tiên **câu hỏi nhiều lựa chọn** khi có thể
-- Chỉ sử dụng câu hỏi mở khi cần thiết
-- Nếu một chủ đề cần đi sâu, chia thành nhiều câu hỏi
-
-Tập trung vào việc hiểu:
-
-- mục đích
-- người dùng mục tiêu
-- ràng buộc
-- tiêu chí thành công
-- những gì KHÔNG nằm trong phạm vi (non-goals)
-
----
-
-### 3️⃣ Yêu cầu phi chức năng (Bắt buộc)
-
-Bạn PHẢI làm rõ hoặc đề xuất giả định cho:
-
-- Kỳ vọng hiệu năng
-- Quy mô (người dùng, dữ liệu, traffic)
-- Ràng buộc bảo mật hoặc quyền riêng tư
-- Nhu cầu độ tin cậy / khả dụng
-- Kỳ vọng bảo trì và ownership
-
-Nếu người dùng không chắc chắn:
-
-- Đề xuất các giá trị mặc định hợp lý
-- Đánh dấu rõ ràng là **giả định**
-
----
-
-### 4️⃣ Khóa hiểu biết (Cổng bắt buộc)
-
-Trước khi đề xuất **bất kỳ thiết kế nào**, bạn PHẢI dừng lại và thực hiện:
-
-#### Tóm tắt hiểu biết
-Cung cấp tóm tắt ngắn gọn (5–7 gạch đầu dòng) bao gồm:
-- Đang xây dựng cái gì
-- Tại sao nó tồn tại
-- Dành cho ai
-- Các ràng buộc chính
-- Những gì KHÔNG nằm trong phạm vi
-
-#### Giả định
-Liệt kê tất cả giả định một cách rõ ràng.
-
-#### Câu hỏi mở
-Liệt kê các câu hỏi chưa được giải quyết, nếu có.
-
-Sau đó hỏi:
-
-> "Điều này có phản ánh chính xác ý định của bạn không?
-> Vui lòng xác nhận hoặc sửa bất cứ điều gì trước khi chuyển sang thiết kế."
-
-**KHÔNG được tiến hành cho đến khi nhận được xác nhận rõ ràng.**
-
----
-
-### 5️⃣ Khám phá các phương pháp thiết kế
-
-Khi hiểu biết đã được xác nhận:
-
-- Đề xuất **2–3 phương pháp khả thi**
-- Dẫn đầu với **lựa chọn được khuyến nghị**
-- Giải thích đánh đổi rõ ràng:
-  - độ phức tạp
-  - khả năng mở rộng
-  - rủi ro
-  - bảo trì
-- Tránh tối ưu hóa sớm (**YAGNI một cách triệt để**)
-
-Đây vẫn **chưa phải** thiết kế cuối cùng.
-
----
-
-### 6️⃣ Trình bày thiết kế (Từng phần)
-
-Khi trình bày thiết kế:
-
-- Chia thành các phần **tối đa 200–300 từ**
-- Sau mỗi phần, hỏi:
-
-  > "Phần này có ổn không?"
-
-Bao gồm, nếu liên quan:
-
-- Kiến trúc
-- Thành phần
-- Luồng dữ liệu
-- Xử lý lỗi
-- Trường hợp biên
-- Chiến lược kiểm thử
-
----
-
-### 7️⃣ Nhật ký quyết định (Bắt buộc)
-
-Duy trì một **Nhật ký quyết định** xuyên suốt cuộc thảo luận thiết kế.
-
-Cho mỗi quyết định:
-- Đã quyết định điều gì
-- Các phương án thay thế đã xem xét
-- Tại sao chọn phương án này
-
-Nhật ký này cần được lưu giữ cho tài liệu.
-
----
-
-## Sau khi thiết kế
-
-### 📄 Tài liệu
-
-Khi thiết kế đã được xác nhận:
-
-- Viết thiết kế cuối cùng vào định dạng bền vững (ví dụ: Markdown)
-- Bao gồm:
-  - Tóm tắt hiểu biết
-  - Giả định
-  - Nhật ký quyết định
-  - Thiết kế cuối cùng
-
-Lưu trữ tài liệu theo quy trình chuẩn của dự án.
-
----
-
-### 🛠️ Bàn giao triển khai (Tùy chọn)
-
-Chỉ sau khi tài liệu hoàn tất, hỏi:
-
-> "Sẵn sàng để thiết lập triển khai chưa?"
-
-Nếu có:
-- Tạo kế hoạch triển khai rõ ràng
-- Cô lập công việc nếu quy trình hỗ trợ
-- Tiến hành từng bước
-
----
-
-## Tiêu chí thoát (Điều kiện dừng cứng)
-
-Bạn chỉ có thể thoát chế độ brainstorming **khi tất cả điều kiện sau đều đúng**:
-
-- Khóa hiểu biết đã được xác nhận
-- Ít nhất một phương pháp thiết kế được chấp nhận rõ ràng
-- Các giả định chính đã được ghi lại
-- Các rủi ro chính đã được ghi nhận
-- Nhật ký quyết định đã hoàn tất
-
-Nếu bất kỳ tiêu chí nào chưa đạt:
-- Tiếp tục hoàn thiện
-- **KHÔNG được tiến hành triển khai**
-
----
-
-## Nguyên tắc chính (Không thương lượng)
-
-- Từng câu hỏi một
-- Giả định phải được nêu rõ
-- Khám phá các phương án thay thế
-- Xác nhận từng bước
-- Ưu tiên sự rõ ràng hơn sự thông minh
-- Sẵn sàng quay lại để làm rõ
-- **YAGNI một cách triệt để**
-
----
-Nếu thiết kế có tác động cao, rủi ro cao, hoặc yêu cầu mức tin cậy cao, bạn PHẢI bàn giao thiết kế đã hoàn thiện và Nhật ký quyết định cho skill `multi-agent-brainstorming` trước khi triển khai.
-
-## Khi nào sử dụng
-Skill này áp dụng để thực thi quy trình hoặc hành động được mô tả trong phần tổng quan.
-
-## Giới hạn
-- Chỉ sử dụng skill này khi tác vụ rõ ràng phù hợp với phạm vi mô tả ở trên.
-- Không coi kết quả đầu ra là thay thế cho việc xác thực, kiểm thử hoặc review chuyên gia theo môi trường cụ thể.
-- Dừng lại và hỏi làm rõ nếu thiếu đầu vào cần thiết, quyền truy cập, ranh giới an toàn hoặc tiêu chí thành công.
+### 1. Nắm hiện trạng (làm trước khi hỏi)
+Đọc các file, tài liệu, kế hoạch và quyết định trước đó liên quan. Xác định cái gì đã có, cái gì được đề xuất mới, và ràng buộc nào đang ngầm tồn tại. Chưa thiết kế ở bước này.
+
+### 2. Làm rõ yêu cầu
+- Hỏi **tối đa 3 câu một lượt**, ưu tiên trắc nghiệm, chỉ hỏi điều thật sự chưa rõ.
+- Điều suy ra được từ code/ngữ cảnh thì ghi thành **giả định**, không hỏi.
+- Nếu một chủ đề cần đào sâu, để lượt sau.
+- Cần hiểu: mục đích, người dùng mục tiêu, ràng buộc, tiêu chí thành công, và những gì **không** nằm trong phạm vi.
+
+### 3. Yêu cầu phi chức năng (chế độ đầy đủ)
+Làm rõ hoặc đề xuất mặc định cho: hiệu năng, quy mô (người dùng/dữ liệu/traffic), bảo mật & quyền riêng tư, độ tin cậy, bảo trì. Người dùng không chắc → đề xuất giá trị hợp lý và đánh dấu rõ là giả định.
+
+### 4. Understanding Lock (cổng bắt buộc)
+Trình bày đúng định dạng sau, rồi ghi vào file plan:
+
+```
+## Understanding Lock
+- Làm gì:
+- Vì sao:
+- Cho ai:
+- Ràng buộc chính:
+- Ngoài phạm vi:
+## Giả định
+- ...
+## Câu hỏi còn mở
+- ... (hoặc "Không")
+```
+
+Sau đó hỏi: *"Điều này có đúng ý bạn không? Xác nhận hoặc sửa trước khi mình bắt đầu."*
+
+**Kết thúc lượt trả lời tại đây.** Không đề xuất thiết kế, không gọi tool nào khác. Chỉ tiếp tục khi người dùng xác nhận rõ ràng. Việc ghi `gate1` và `gate1_quote` theo đúng quy tắc của skill `plan`.
+
+### 5. Phương án
+Sau khi Lock được xác nhận:
+- Đề xuất 2–3 phương án khả thi, nêu phương án khuyến nghị trước.
+- Mỗi phương án nêu đánh đổi: độ phức tạp, khả năng mở rộng, rủi ro, bảo trì.
+- Chỉ có một cách hợp lý thì nói thẳng và bỏ so sánh.
+- Chờ người dùng chọn.
+
+### 6. Trình bày thiết kế (chế độ đầy đủ)
+Chia phần ≤300 từ, hỏi *"Phần này ổn không?"* sau mỗi phần. Bao gồm khi liên quan: kiến trúc, thành phần, luồng dữ liệu, xử lý lỗi, trường hợp biên, chiến lược kiểm thử.
+
+### 7. Decision Log
+Ghi liên tục vào file plan, mỗi quyết định gồm: đã chọn gì, đã xem xét phương án nào khác, vì sao chọn.
+
+## Điều kiện kết thúc
+
+Chỉ rời brainstorming khi đủ cả năm:
+1. Understanding Lock đã được xác nhận.
+2. Đã có phương án được chấp nhận rõ ràng.
+3. Giả định chính đã ghi lại.
+4. Rủi ro chính đã ghi lại.
+5. Decision Log đã cập nhật.
+
+Thiếu điều nào → tiếp tục làm rõ, không triển khai.
+
+## Sau thiết kế
+
+- Thiết kế cuối cùng (Lock, giả định, phương án, Decision Log) nằm trong file plan.
+- Nếu dùng trong `plan` → quay lại quy trình của `plan` (checklist, Pha 2).
+- Nếu dùng độc lập → hỏi: *"Sẵn sàng chuyển sang triển khai chưa?"* và chỉ làm tiếp khi người dùng đồng ý.
+- Thiết kế rủi ro cao (bảo mật, dữ liệu, thanh toán, thay đổi không thể hoàn tác) → nhờ người dùng hoặc người có chuyên môn xem lại trước khi code.
+
+## Nguyên tắc
+
+- Nêu giả định rõ ràng, không ngầm hiểu.
+- Khám phá phương án thay thế trước khi chốt.
+- Xác nhận từng bước, không đoán là đã đồng ý.
+- Ưu tiên rõ ràng hơn thông minh.
+- Sẵn sàng quay lại sửa Lock khi phát hiện hiểu sai.
