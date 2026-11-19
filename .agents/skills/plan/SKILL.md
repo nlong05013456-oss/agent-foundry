@@ -1,118 +1,119 @@
 ---
 name: plan
-description: "Quy trình thực thi task lập trình toàn diện: Brainstorming → Execution → Tự động lưu Learnings"
+description: Dùng khi người dùng yêu cầu thêm tính năng, refactor, đổi kiến trúc, hoặc sửa bug không tầm thường (đụng từ 2 file trở lên hoặc đổi hành vi). Điều phối 3 pha Brainstorm → Execute → Learnings với file trạng thái và hai cổng kiểm soát. Không dùng cho việc nhỏ (sửa chữ, đổi tên biến, chỉnh style 1 chỗ).
 ---
 
 <!-- 
   Origin Chain:
   1. Upstream: quang26071999/demo_landing_page (.agent/workflows/plan.md) (No license file)
-  2. Current: agent-foundry (Converted from legacy workflow to modern Antigravity skill, refactored with gate checks)
+  2. Current: agent-foundry (Converted to modern Antigravity skill, refactored with physical state gate checks)
 -->
 
-# Plan & Execute Skill
+# Plan & Execute
 
-Quy trình 3 pha chuẩn mực để thực thi bất kỳ task lập trình nào: **Brainstorm → Execute → Save Learnings**.
+Quy trình 3 pha cho task cỡ **Vừa** hoặc **Lớn** (phân loại theo rule `workflow-gate`).
+Mọi trạng thái được ghi vào **file plan**; các cổng chỉ qua được khi file plan có bằng chứng.
+
+> Nạp learnings do rule `load-learnings` đảm nhiệm. Skill này không lặp lại bước đó.
+
+## File plan: `.agents/plans/<slug>.md`
+
+Tạo ngay khi bắt đầu (`<slug>` là tên ngắn dạng kebab-case, ví dụ `dark-mode-toggle`). Đây là file duy nhất được phép tạo trước Gate 1.
+
+```markdown
+---
+size: Vừa | Lớn
+gate1: pending          # pending | approved | waived
+gate1_quote: ""         # nguyên văn câu duyệt của người dùng
+gate2: pending          # pending | passed | passed-no-tests
+gate2_evidence: ""      # lệnh đã chạy + kết quả thật
+learnings: pending      # pending | saved | declined
+---
+## Understanding Lock
+## Giả định
+## Phương án đã chọn
+## Decision Log
+## Checklist
+- [ ] ...
+- [ ] Verify: ghi lệnh + kết quả vào gate2_evidence
+- [ ] Hỏi người dùng có lưu learnings không
+```
+
+Quy tắc đổi trạng thái:
+- `gate1` chỉ đổi sang `approved` ở lượt trả lời SAU lượt trình bày Understanding Lock, và phải chép nguyên văn câu duyệt vào `gate1_quote`.
+- `gate2` chỉ đổi sang `passed` sau khi đã chạy lệnh verify thật và dán kết quả vào `gate2_evidence`.
+- Không được tự sửa trạng thái trước khi có bằng chứng tương ứng.
 
 ---
 
-## Khi nào sử dụng
-- Khi bắt đầu một task tính năng, refactoring hoặc giải quyết vấn đề kỹ thuật quan trọng.
-- Cần lập kế hoạch chặt chẽ, kiểm soát rủi ro và xác thực từng bước trước khi hoàn thành.
+## Pha 1: BRAINSTORM
 
----
+Mục tiêu: hiểu đúng yêu cầu và chốt thiết kế trước khi viết code. Trong pha này không tạo/sửa file nào ngoài file plan.
 
-## Pha 1: BRAINSTORM (Bắt buộc)
+### Chế độ gọn (task Vừa)
+1. Đọc nhanh các file liên quan trong project để nắm hiện trạng.
+2. Hỏi tối đa **3 câu một lượt**, ưu tiên trắc nghiệm, chỉ hỏi điều thật sự chưa rõ (mục tiêu, phạm vi, tiêu chí xong). Đã suy ra được thì ghi thành giả định, đừng hỏi.
+3. Trình bày **Understanding Lock** (3–5 gạch đầu dòng): làm gì, vì sao, phạm vi, NGOÀI phạm vi, giả định.
+4. Nếu có nhiều hướng với đánh đổi thật → nêu phương án khuyến nghị và 1 lựa chọn thay thế, mỗi cái kèm ưu/nhược 1 dòng. Chỉ có một cách hợp lý thì bỏ bước này.
 
-Trước khi viết code, AI **PHẢI** thực hiện quy trình brainstorming để làm rõ yêu cầu và thiết kế.
+### Chế độ đầy đủ (task Lớn)
+Áp dụng skill `brainstorming` với một điều chỉnh: hỏi **tối đa 3 câu một lượt** thay vì từng câu một. Bắt buộc có:
+- Yêu cầu phi chức năng: hiệu năng, quy mô, bảo mật (không rõ thì đề xuất mặc định và đánh dấu là giả định).
+- 2–3 phương án với đánh đổi.
+- Thiết kế chia phần ≤300 từ, xác nhận từng phần.
+- Decision Log.
 
-### Bước 1.1: Load Learnings liên quan
+### Gate 1
+Ghi Understanding Lock, giả định và (nếu có) phương án vào file plan. Sau đó:
 
-1. Đọc danh sách file trong `.agents/learnings/`.
-2. Xác định và đọc nội dung các file learnings liên quan đến task hiện tại (ví dụ: `patterns.md`, `architecture.md`, `bugs-solutions.md`, v.v.).
-3. Tóm tắt ngắn: "Đã load X learnings liên quan đến task này: [danh sách]".
+1. Hỏi: *"Điều này có đúng ý bạn không? Xác nhận hoặc sửa trước khi mình bắt đầu."*
+2. **Kết thúc lượt trả lời tại đây.** Không gọi tool ghi file nào khác, không chạy lệnh nào.
+3. Lượt sau, nếu người dùng duyệt → chép nguyên văn câu của họ vào `gate1_quote`, đặt `gate1: approved`. Nếu họ sửa → cập nhật Lock và hỏi lại.
+4. Nếu người dùng nói rõ muốn bỏ qua brainstorming → `gate1: waived` kèm câu nói của họ, rồi tiếp tục.
 
-### Bước 1.2: Kích hoạt Brainstorming
-
-Áp dụng quy trình từ skill `brainstorming` (`.agents/skills/brainstorming/SKILL.md`):
-
-1. **Understand Context**: Đọc các file liên quan trong project, hiểu trạng thái hiện tại.
-2. **Ask Questions**: Hỏi từng câu một, ưu tiên câu hỏi trắc nghiệm (multiple-choice) để làm rõ yêu cầu.
-3. **Non-Functional Requirements**: Làm rõ hiệu năng, quy mô, bảo mật.
-4. **Understanding Lock**: Tổng hợp 5-7 gạch đầu dòng, nêu rõ giả định, yêu cầu người dùng xác nhận.
-   - **KHÔNG được tiếp tục nếu chưa có xác nhận từ người dùng.**
-5. **Design Approaches**: Đề xuất 2-3 phương án tiếp cận, phân tích ưu nhược điểm (trade-offs).
-6. **Present Design**: Trình bày thiết kế chi tiết từng phần nhỏ (200-300 từ) và xác nhận từng phần.
-7. **Decision Log**: Ghi lại các quyết định đã thống nhất.
-
-> ⛔ **Cổng kiểm soát (Gate 1)**: Tuyệt đối không chuyển sang Pha 2 nếu chưa hoàn thành Understanding Lock và chưa được người dùng duyệt thiết kế.
+⛔ **Gate 1 chưa `approved` hoặc `waived` thì không sang Pha 2.**
 
 ---
 
 ## Pha 2: EXECUTE
 
-### Bước 2.1: Tạo Task Checklist
+### 2.1 Lập checklist
+Từ thiết kế đã duyệt, chia thành task nhỏ, mỗi task kiểm chứng được. Ghi vào mục Checklist của file plan. Luôn có hai task cuối: **Verify** và **Hỏi lưu learnings**.
 
-Dựa trên thiết kế đã duyệt, lập checklist chi tiết:
+### 2.2 Thực thi từng task
+Với mỗi task:
+1. Đánh dấu `[/]` khi bắt đầu.
+2. **Context audit** ngắn: đọc code liên quan, kiểm tra hàm/biến/dependency sẽ bị ảnh hưởng.
+3. Viết code theo rules của dự án (`.agents/rules/`). Làm đúng phạm vi đã duyệt; thấy cần thêm việc ngoài phạm vi → ghi vào cuối plan và hỏi người dùng, không tự làm.
+4. Đánh dấu `[x]` khi xong.
 
-```markdown
-- [ ] Task 1: Mô tả công việc cụ thể
-  - [ ] Sub-task 1.1
-  - [ ] Sub-task 1.2
-- [ ] Task 2: Mô tả công việc cụ thể
-```
+Nếu giữa chừng phát hiện thiết kế sai hoặc phạm vi phình to → dừng, báo người dùng, cập nhật Lock rồi xin duyệt lại (quay về Gate 1).
 
-### Bước 2.2: Thực thi từng bước
+### 2.3 Verify
+1. Đọc file cấu hình dự án (`package.json`, `pyproject.toml`, `go.mod`, `Cargo.toml`, `build.gradle`...) để biết lệnh lint/test/build **thực sự có**. Không đoán lệnh.
+2. Chạy các lệnh đó (ví dụ Node: `npm run lint`, `npm test`, `npm run build`).
+3. Ghi vào `gate2_evidence`: lệnh đã chạy và kết quả thật (pass/fail, số test, lỗi chính).
+4. Có lỗi → quay lại 2.2 sửa rồi chạy lại. Không bỏ qua lỗi.
+5. Dự án không có test/lint → đặt `gate2: passed-no-tests` và nói rõ với người dùng rằng chưa có kiểm chứng tự động.
 
-Với mỗi task trong checklist:
-
-1. Đánh dấu `[/]` khi bắt đầu thực hiện.
-2. Thực hiện Context Audit:
-   - Quét ngữ cảnh code hiện tại
-   - Rà soát biến và state
-   - Kiểm tra hàm và dependencies
-   - Xác minh tác động phụ (impact check)
-3. Viết code sạch, đúng quy chuẩn thiết kế và rules của dự án (xem `.agents/rules/`).
-4. Đánh dấu `[x]` khi hoàn thành task con.
-
-### Bước 2.3: Verify (Xác thực chất lượng)
-
-Sau khi hoàn thành code, chạy bộ công cụ xác thực tương ứng với công nghệ của dự án:
-- Với Node/Web: `npm run lint` / `npm test` / `npm run build`
-- Với Python: `pytest` / `flake8` / `ruff`
-- Với Go: `go test ./...` / `go vet`
-- Với Rust: `cargo check` / `cargo test`
-- Với Java/Kotlin: `./gradlew test` / `./gradlew check`
-
-Nếu phát hiện lỗi, quay lại Bước 2.2 để sửa trước khi tiếp tục.
-
-> ⛔ **Cổng kiểm soát (Gate 2)**: Không chuyển sang Pha 3 nếu code build lỗi hoặc tests chưa vượt qua.
+⛔ **Gate 2 chưa `passed` hoặc `passed-no-tests` thì không sang Pha 3 và không được báo "hoàn thành".**
 
 ---
 
-## Pha 3: SAVE LEARNINGS (Bán tự động)
+## Pha 3: LEARNINGS
 
-### Bước 3.1: Hỏi xác nhận
+Đây là task cuối trong checklist, không được bỏ qua.
 
-Sau khi verify thành công:
-> "Task đã hoàn thành và xác thực thành công. Bạn có muốn lưu learnings từ task này vào `.agents/learnings/` không? (Có/Không)"
-
-- Nếu **Không** → Kết thúc quy trình.
-- Nếu **Có** → Tiếp tục Bước 3.2.
-
-### Bước 3.2: Kích hoạt skill `ai-learning`
-
-Sử dụng skill `ai-learning` (`.agents/skills/ai-learning/SKILL.md`) để phân loại thông tin vào 4 nhóm:
-- **Architecture**: Quyết định kiến trúc & lý do
-- **Bugs & Solutions**: Lỗi gặp phải, root cause và giải pháp
-- **How-To**: Quy trình thực hiện cụ thể
-- **Patterns**: Coding patterns hoặc conventions mới
+1. Hỏi: *"Task đã xong và đã verify. Bạn có muốn lưu learnings từ task này vào `.agents/learnings/` không? (Có/Không)"*
+2. **Không** → đặt `learnings: declined`, kết thúc.
+3. **Có** → dùng skill `ai-learning` để lưu, đặt `learnings: saved`.
 
 ---
 
-## Kết thúc Quy trình
+## Kết thúc
 
-Tóm tắt ngắn gọn:
-1. Những việc đã hoàn thành
-2. Learnings đã lưu (nếu có)
-3. Các bước tiếp theo hoặc lưu ý tồn đọng (nếu có)
-
+Tóm tắt ngắn gọn cho người dùng:
+- Đã làm gì (đối chiếu checklist).
+- Kết quả verify (trích `gate2_evidence`).
+- Learnings: đã lưu / người dùng từ chối.
+- Việc tồn đọng hoặc đề xuất bước tiếp theo (nếu có).
